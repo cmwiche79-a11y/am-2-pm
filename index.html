@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Am2Pm — Daily Focus for Young Professionals</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --am: #f59e0b;
+      --pm: #38bdf8;
+      --green: #10b981;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .app { width: 100%; max-width: 640px; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    h1 { margin: 0; font-size: 1.6rem; letter-spacing: -0.5px; }
+    h1 span.am { color: var(--am); }
+    h1 span.pm { color: var(--pm); }
+    .badge {
+      font-size: 0.75rem;
+      background: #064e3b;
+      color: #6ee7b7;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .input-card {
+      background: var(--card);
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+    .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    select, button {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    button.primary {
+      background: var(--green);
+      color: #022c22;
+      font-weight: 700;
+      border: none;
+      margin-left: auto;
+    }
+    .section-title {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 20px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .am-title { color: var(--am); }
+    .pm-title { color: var(--pm); }
+    .task-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .task {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 12px 14px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .task.done span.title { text-decoration: line-through; color: var(--muted); }
+    .meta { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+    .actions button { padding: 6px 10px; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1><span class="am">Am</span>2<span class="pm">Pm</span></h1>
+        <small style="color: var(--muted)">Zero-data daily planner for the full hustle</small>
+      </div>
+      <span class="badge">Offline Ready</span>
+    </header>
+
+    <div class="input-card">
+      <input id="taskInput" type="text" placeholder="What needs to move forward today?" />
+      <div class="controls">
+        <select id="shiftSelect">
+          <option value="AM">☀️ AM — Day Job / Core Work</option>
+          <option value="PM">🌙 PM — Study / Side Hustle</option>
+        </select>
+        <select id="powerSelect">
+          <option value="⚡ Needs Power/Data">⚡ Needs Power/Data</option>
+          <option value="🔋 Offline / Low-Battery">🔋 Offline / Low-Battery</option>
+        </select>
+        <button class="primary" onclick="addTask()">+ Add Task</button>
+      </div>
+    </div>
+
+    <div class="section-title am-title">☀️ AM Shift — Career & Core Priorities</div>
+    <ul id="amList" class="task-list"></ul>
+
+    <div class="section-title pm-title">🌙 PM Shift — Hustle, Exams & Growth</div>
+    <ul id="pmList" class="task-list"></ul>
+  </div>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem('am2pm_tasks')) || [];
+
+    function save() {
+      localStorage.setItem('am2pm_tasks', JSON.stringify(tasks));
+      render();
+    }
+
+    function addTask() {
+      const input = document.getElementById('taskInput');
+      const shift = document.getElementById('shiftSelect').value;
+      const power = document.getElementById('powerSelect').value;
+      if (!input.value.trim()) return;
+
+      tasks.unshift({
+        id: Date.now(),
+        title: input.value.trim(),
+        shift,
+        power,
+        done: false
+      });
+      input.value = '';
+      save();
+    }
+
+    function toggleTask(id) {
+      tasks = tasks.map(t => t.id === id ? { ...t, done: !t.done } : t);
+      save();
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(t => t.id !== id);
+      save();
+    }
+
+    function render() {
+      const amList = document.getElementById('amList');
+      const pmList = document.getElementById('pmList');
+      amList.innerHTML = '';
+      pmList.innerHTML = '';
+
+      tasks.forEach(task => {
+        const li = document.createElement('li');
+        li.className = `task ${task.done ? 'done' : ''}`;
+        li.innerHTML = `
+          <div>
+            <span class="title">${task.title}</span>
+            <div class="meta">${task.power}</div>
+          </div>
+          <div class="actions">
+            <button onclick="toggleTask(${task.id})">${task.done ? 'Undo' : '✓'}</button>
+            <button onclick="deleteTask(${task.id})">✕</button>
+          </div>
+        `;
+        (task.shift === 'AM' ? amList : pmList).appendChild(li);
+      });
+    }
+
+    document.getElementById('taskInput').addEventListener('keypress', e => {
+      if (e.key === 'Enter') addTask();
+    });
+
+    render();
+  </script>
+</body>
+</html>
