@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Am2Pm — Daily Focus & Milestone Tracker</title>
+  <title>Am2Pm — Daily Focus & Matter Stage Tracker</title>
   <style>
     :root {
       --bg: #f4f7fc;
@@ -206,11 +206,17 @@
       justify-content: space-between;
       align-items: center;
       margin: 6px 0 12px;
+      gap: 8px;
     }
     .sec-title {
       font-size: 1rem;
       font-weight: 700;
       color: var(--text);
+    }
+    .sec-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     .sec-action {
       font-size: 0.78rem;
@@ -221,8 +227,11 @@
       cursor: pointer;
       padding: 4px 6px;
     }
+    .sec-action.secondary {
+      color: var(--muted);
+    }
 
-    /* Task Cards */
+    /* Task & Matter Cards */
     .task-list {
       display: flex;
       flex-direction: column;
@@ -233,13 +242,15 @@
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 13px 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
       box-shadow: var(--shadow);
       transition: opacity 0.2s ease;
     }
     .task-card.done { opacity: 0.58; }
+    .task-top-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
     .cat-badge {
       width: 44px;
       height: 44px;
@@ -256,7 +267,7 @@
     .bg-conveyancing { background: #f3e8ff; color: #7e22ce; }
     .bg-probate { background: #e0f2fe; color: #0369a1; }
 
-    .task-body { flex: 1; min-width: 0; }
+    .task-body { flex: 1; min-width: 0; cursor: pointer; }
     .task-title {
       font-size: 0.92rem;
       font-weight: 600;
@@ -285,20 +296,30 @@
       font-weight: 700;
       font-size: 0.68rem;
     }
+    .carry-tag {
+      color: var(--royal);
+      background: var(--royal-soft);
+      border: 1px solid var(--royal-border);
+      padding: 1px 6px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.68rem;
+    }
     .task-actions {
       display: flex;
       align-items: center;
       gap: 6px;
     }
     .check-circle {
-      width: 28px;
+      min-width: 32px;
       height: 28px;
-      border-radius: 50%;
-      border: 2px solid var(--royal-border);
+      padding: 0 8px;
+      border-radius: 999px;
+      border: 1.5px solid var(--royal-border);
       background: var(--royal-soft);
       color: var(--royal);
       font-weight: 800;
-      font-size: 0.78rem;
+      font-size: 0.7rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -319,6 +340,122 @@
       padding: 4px 6px;
     }
     .del-btn:hover { color: #dc2626; }
+
+    /* Stage Progress Banner inside Card */
+    .stage-strip {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--bg);
+    }
+    .stage-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .stage-current-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--royal-dark);
+      cursor: pointer;
+    }
+    .stage-current-label span {
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .advance-btn {
+      background: var(--royal-soft);
+      border: 1px solid var(--royal-border);
+      color: var(--royal);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .advance-btn:hover {
+      background: var(--royal);
+      color: var(--white);
+    }
+    .mini-bar-bg {
+      height: 5px;
+      background: var(--royal-soft);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .mini-bar-fill {
+      height: 100%;
+      background: var(--royal);
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+
+    /* Expandable Requirements Checklist */
+    .stage-drawer {
+      margin-top: 10px;
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: none;
+    }
+    .stage-drawer.open { display: block; }
+    .req-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 0.78rem;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .req-item:last-of-type { border-bottom: none; }
+    .req-item.req-done {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+    .req-box {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1.5px solid var(--royal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: var(--white);
+      background: var(--white);
+      flex-shrink: 0;
+    }
+    .req-item.req-done .req-box {
+      background: var(--royal);
+    }
+    .add-req-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .add-req-row input {
+      flex: 1;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.76rem;
+      outline: none;
+    }
+    .add-req-row button {
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: none;
+      background: var(--royal);
+      color: var(--white);
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
 
     /* Segmented Control */
     .segmented {
@@ -463,6 +600,8 @@
       border-radius: 24px 24px 0 0;
       padding: 20px 18px 28px;
       box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.15);
+      max-height: 90vh;
+      overflow-y: auto;
     }
     .sheet-handle {
       width: 40px;
@@ -482,7 +621,7 @@
       border-radius: 12px;
       border: 1.5px solid var(--border);
       font-size: 0.95rem;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       outline: none;
     }
     .sheet input[type="text"]:focus { border-color: var(--royal); }
@@ -516,7 +655,7 @@
     }
     .save-task-btn {
       width: 100%;
-      margin-top: 18px;
+      margin-top: 16px;
       padding: 14px;
       border-radius: 14px;
       border: none;
@@ -588,8 +727,11 @@
       </div>
 
       <div class="sec-head">
-        <span class="sec-title" id="homeListTitle">Active Tasks</span>
-        <button class="sec-action" onclick="clearAllDone()">Clear Done</button>
+        <span class="sec-title" id="homeListTitle">Active Matters & Tasks</span>
+        <div class="sec-actions">
+          <button class="sec-action secondary" onclick="carryOverUnfinished()">Carry Over</button>
+          <button class="sec-action" onclick="clearAllDone()">Clear Done</button>
+        </div>
       </div>
       <div id="homeTaskList" class="task-list"></div>
     </div>
@@ -617,7 +759,7 @@
 
       <div class="white-card">
         <div class="big-stat-label" id="rangeLabel">Completed This Week</div>
-        <div class="big-stat-num" id="rangeTotalNum">0 Tasks</div>
+        <div class="big-stat-num" id="rangeTotalNum">0 Items</div>
         <div class="big-stat-sub" id="amPmRatioText">0 AM Shift  /  0 PM Shift</div>
         <div class="bar-chart" id="weeklyBarChart"></div>
       </div>
@@ -645,14 +787,14 @@
       <div class="white-card">
         <div class="breakdown-row">
           <div>
-            <div class="breakdown-name">Total Tasks Completed</div>
-            <div class="breakdown-sub">All-time recorded milestones</div>
+            <div class="breakdown-name">Total Milestones & Stages Cleared</div>
+            <div class="breakdown-sub">All-time recorded completions</div>
           </div>
           <div class="breakdown-pct" id="profTotal">0</div>
         </div>
         <div class="breakdown-row">
           <div>
-            <div class="breakdown-name">Offline / Blackout Tasks Done</div>
+            <div class="breakdown-name">Offline / Blackout Work Done</div>
             <div class="breakdown-sub">Executed without power or data</div>
           </div>
           <div class="breakdown-pct" id="profOffline">0</div>
@@ -687,14 +829,20 @@
     <div class="sheet-backdrop" id="sheetBackdrop" onclick="closeSheetOnBg(event)">
       <div class="sheet">
         <div class="sheet-handle"></div>
-        <div class="sheet-title">New Task</div>
-        <input id="taskInput" type="text" placeholder="e.g., Paginate record of appeal, Title search..." />
+        <div class="sheet-title">New Matter or Task</div>
+        <input id="taskInput" type="text" placeholder="e.g., Stand 4122 Transfer, Estate of J. Banda..." />
 
         <div class="chip-label">Practice Lane</div>
         <div class="chip-row" id="catChips">
           <button type="button" class="choice-chip selected" data-val="litigation" onclick="pickChip('catChips', this)">Litigation</button>
           <button type="button" class="choice-chip" data-val="conveyancing" onclick="pickChip('catChips', this)">Conveyancing</button>
           <button type="button" class="choice-chip" data-val="probate" onclick="pickChip('catChips', this)">Probate</button>
+        </div>
+
+        <div class="chip-label">Hurdle / Stage Tracking</div>
+        <div class="chip-row" id="modeChips">
+          <button type="button" class="choice-chip selected" data-val="hurdles" onclick="pickChip('modeChips', this)">Log Hurdles As They Come</button>
+          <button type="button" class="choice-chip" data-val="single" onclick="pickChip('modeChips', this)">Single Task</button>
         </div>
 
         <div class="chip-label">Shift & Priority</div>
@@ -721,6 +869,7 @@
   <script>
     let tasks = JSON.parse(localStorage.getItem('am2pm_tasks')) || [];
     let history = JSON.parse(localStorage.getItem('am2pm_history')) || [];
+    let openDrawers = {};
     let homeCatFilter = 'all';
     let blackoutMode = false;
     let currentShiftTab = 'AM';
@@ -782,20 +931,42 @@
     function addTask() {
       const input = document.getElementById('taskInput');
       if (!input.value.trim()) return;
+      const cat = normalizeCategory(getChipVal('catChips'));
+      const tracksHurdles = getChipVal('modeChips') === 'hurdles';
 
+      const newId = Date.now();
       tasks.unshift({
-        id: Date.now(),
+        id: newId,
         title: input.value.trim(),
-        category: normalizeCategory(getChipVal('catChips')),
+        category: cat,
         shift: getChipVal('shiftChips') || 'AM',
         priority: Number(getChipVal('prioChips') || 2),
         power: getChipVal('powerChips') || 'Needs Power/Data',
-        done: false
+        tracksHurdles,
+        stages: [],
+        done: false,
+        carriedOver: false
       });
+
+      if (tracksHurdles) {
+        openDrawers[newId] = true;
+      }
 
       input.value = '';
       document.getElementById('sheetBackdrop').classList.remove('open');
       save();
+    }
+
+    function recordHistory(id, cat, shift, power) {
+      if (!history.some(h => h.taskId === id)) {
+        history.push({
+          taskId: id,
+          category: cat,
+          shift,
+          power,
+          completedAt: new Date().toISOString()
+        });
+      }
     }
 
     function toggleTask(id) {
@@ -804,21 +975,79 @@
         const becomingDone = !t.done;
         const cat = normalizeCategory(t.category);
         if (becomingDone) {
-          if (!history.some(h => h.taskId === id)) {
-            history.push({
-              taskId: id,
-              category: cat,
-              shift: t.shift,
-              power: t.power,
-              completedAt: new Date().toISOString()
-            });
-          }
+          recordHistory(id, cat, t.shift, t.power);
         } else {
           history = history.filter(h => h.taskId !== id);
         }
-        return { ...t, category: cat, done: becomingDone };
+        const updatedStages = Array.isArray(t.stages)
+          ? t.stages.map(s => ({ ...s, done: becomingDone ? true : s.done }))
+          : [];
+        return { ...t, category: cat, stages: updatedStages, done: becomingDone };
       });
       save();
+    }
+
+    function advanceNextStage(id) {
+      tasks = tasks.map(t => {
+        if (t.id !== id || !Array.isArray(t.stages) || t.stages.length === 0) return t;
+        const nextIdx = t.stages.findIndex(s => !s.done);
+        if (nextIdx === -1) return t;
+
+        const updatedStages = t.stages.map((s, idx) => idx === nextIdx ? { ...s, done: true } : s);
+        const cat = normalizeCategory(t.category);
+        recordHistory(`${id}_stage_${nextIdx}_${Date.now()}`, cat, t.shift, t.power);
+
+        const allCleared = updatedStages.every(s => s.done);
+        if (allCleared) {
+          recordHistory(id, cat, t.shift, t.power);
+        }
+        return { ...t, category: cat, stages: updatedStages, done: allCleared };
+      });
+      save();
+    }
+
+    function toggleStageItem(taskId, stageIdx) {
+      tasks = tasks.map(t => {
+        if (t.id !== taskId || !Array.isArray(t.stages)) return t;
+        const cat = normalizeCategory(t.category);
+        const updatedStages = t.stages.map((s, idx) => {
+          if (idx !== stageIdx) return s;
+          const nextState = !s.done;
+          if (nextState) {
+            recordHistory(`${taskId}_req_${stageIdx}_${Date.now()}`, cat, t.shift, t.power);
+          }
+          return { ...s, done: nextState };
+        });
+        const allCleared = updatedStages.length > 0 && updatedStages.every(s => s.done);
+        if (allCleared && !t.done) {
+          recordHistory(taskId, cat, t.shift, t.power);
+        }
+        return { ...t, category: cat, stages: updatedStages, done: allCleared };
+      });
+      save();
+    }
+
+    function addCustomStage(taskId) {
+      const inp = document.getElementById(`new-req-${taskId}`);
+      if (!inp || !inp.value.trim()) return;
+      const label = inp.value.trim();
+      tasks = tasks.map(t => {
+        if (t.id !== taskId) return t;
+        const existing = Array.isArray(t.stages) ? t.stages : [];
+        return {
+          ...t,
+          tracksHurdles: true,
+          stages: [...existing, { label, done: false }],
+          done: false
+        };
+      });
+      openDrawers[taskId] = true;
+      save();
+    }
+
+    function toggleDrawer(taskId) {
+      openDrawers[taskId] = !openDrawers[taskId];
+      renderAll();
     }
 
     function deleteTask(id) {
@@ -828,6 +1057,24 @@
 
     function clearAllDone() {
       tasks = tasks.filter(t => !t.done);
+      save();
+    }
+
+    function carryOverUnfinished() {
+      const unfinished = tasks.filter(t => !t.done);
+      const completedCount = tasks.filter(t => t.done).length;
+      if (unfinished.length === 0 && completedCount === 0) return;
+
+      const msg = unfinished.length > 0
+        ? `Roll ${unfinished.length} unfinished matter${unfinished.length === 1 ? '' : 's'} into a new day and clear ${completedCount} completed item${completedCount === 1 ? '' : 's'}?`
+        : `Clear ${completedCount} completed item${completedCount === 1 ? '' : 's'} to start a clean slate?`;
+
+      if (!confirm(msg)) return;
+
+      tasks = unfinished.map(t => ({
+        ...t,
+        carriedOver: true
+      }));
       save();
     }
 
@@ -874,25 +1121,71 @@
       const catKey = normalizeCategory(task.category);
       const cat = CATEGORIES[catKey];
       const isOffline = (task.power || '').toLowerCase().includes('offline');
+      const hasStages = Array.isArray(task.stages) && task.stages.length > 0;
+      const showStagePanel = hasStages || task.tracksHurdles;
+
+      let stageHtml = '';
+      if (showStagePanel) {
+        const totalStages = task.stages.length;
+        const doneStages = task.stages.filter(s => s.done).length;
+        const nextStage = task.stages.find(s => !s.done);
+        const stagePct = totalStages === 0 ? 0 : Math.round((doneStages / totalStages) * 100);
+        const isOpen = !!openDrawers[task.id];
+
+        const statusText = totalStages === 0
+          ? 'No hurdles logged yet'
+          : nextStage
+            ? `Stage ${doneStages + 1} of ${totalStages}: ${nextStage.label}`
+            : `All ${totalStages} Hurdles Cleared`;
+
+        stageHtml = `
+          <div class="stage-strip">
+            <div class="stage-header-row">
+              <div class="stage-current-label" onclick="toggleDrawer(${task.id})">
+                ${statusText} <span>(${isOpen ? 'Hide' : totalStages === 0 ? 'Add Hurdle' : 'Stages'})</span>
+              </div>
+              ${nextStage && !task.done ? `<button class="advance-btn" onclick="advanceNextStage(${task.id})">Clear Stage</button>` : ''}
+            </div>
+            ${totalStages > 0 ? `<div class="mini-bar-bg"><div class="mini-bar-fill" style="width:${stagePct}%"></div></div>` : ''}
+            <div class="stage-drawer ${isOpen ? 'open' : ''}">
+              ${task.stages.map((s, idx) => `
+                <div class="req-item ${s.done ? 'req-done' : ''}" onclick="toggleStageItem(${task.id}, ${idx})">
+                  <div class="req-box">${s.done ? 'X' : ''}</div>
+                  <span>${idx + 1}. ${s.label}</span>
+                </div>
+              `).join('')}
+              <div class="add-req-row">
+                <input id="new-req-${task.id}" type="text" placeholder="Add hurdle or stage as it comes up..." onkeypress="if(event.key==='Enter') addCustomStage(${task.id})" />
+                <button type="button" onclick="addCustomStage(${task.id})">Add</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
       const div = document.createElement('div');
       div.className = `task-card ${task.done ? 'done' : ''}`;
       div.innerHTML = `
-        <div class="cat-badge ${cat.bg}">${cat.code}</div>
-        <div class="task-body">
-          <div class="task-title">${task.title}</div>
-          <div class="task-meta">
-            ${task.priority === 1 ? '<span class="prio-tag">URGENT</span>' : ''}
-            <span>${cat.name}</span>
-            <span>/</span>
-            <span>${task.shift} Shift</span>
-            <span>/</span>
-            <span>${isOffline ? 'Offline Ready' : 'Power & Data'}</span>
+        <div class="task-top-row">
+          <div class="cat-badge ${cat.bg}">${cat.code}</div>
+          <div class="task-body" onclick="${showStagePanel ? `toggleDrawer(${task.id})` : ''}">
+            <div class="task-title">${task.title}</div>
+            <div class="task-meta">
+              ${task.priority === 1 ? '<span class="prio-tag">URGENT</span>' : ''}
+              ${task.carriedOver && !task.done ? '<span class="carry-tag">CARRIED OVER</span>' : ''}
+              <span>${cat.name}</span>
+              <span>/</span>
+              <span>${task.shift} Shift</span>
+              <span>/</span>
+              <span>${isOffline ? 'Offline Ready' : 'Power & Data'}</span>
+            </div>
+          </div>
+          <div class="task-actions">
+            <button class="check-circle" onclick="toggleTask(${task.id})">${task.done ? 'DONE' : 'CLOSE'}</button>
+            <button class="del-btn" onclick="deleteTask(${task.id})">DEL</button>
           </div>
         </div>
-        <div class="task-actions">
-          <button class="check-circle" onclick="toggleTask(${task.id})">${task.done ? 'DONE' : ''}</button>
-          <button class="del-btn" onclick="deleteTask(${task.id})">DEL</button>
-        </div>
+        ${stageHtml}
       `;
       return div;
     }
@@ -917,18 +1210,18 @@
 
       const titleEl = document.getElementById('homeListTitle');
       if (blackoutMode) {
-        titleEl.textContent = 'Offline / Low-Battery Tasks';
+        titleEl.textContent = 'Offline / Low-Battery Matters';
       } else if (homeCatFilter !== 'all') {
-        titleEl.textContent = `${CATEGORIES[homeCatFilter].name} Tasks`;
+        titleEl.textContent = `${CATEGORIES[homeCatFilter].name} Matters`;
       } else {
-        titleEl.textContent = 'Active Tasks';
+        titleEl.textContent = 'Active Matters & Tasks';
       }
 
       const listEl = document.getElementById('homeTaskList');
       listEl.innerHTML = '';
       const sorted = sortList(filtered);
       if (sorted.length === 0) {
-        listEl.innerHTML = `<div class="empty-box">No tasks match this view. Tap <strong>+ Add Task</strong> above to log work.</div>`;
+        listEl.innerHTML = `<div class="empty-box">No items match this view. Tap <strong>+ Add Task</strong> above to log a matter.</div>`;
         return;
       }
       sorted.forEach(t => listEl.appendChild(buildTaskCard(t)));
@@ -939,7 +1232,7 @@
       listEl.innerHTML = '';
       const filtered = sortList(tasks.filter(t => t.shift === currentShiftTab));
       if (filtered.length === 0) {
-        listEl.innerHTML = `<div class="empty-box">No ${currentShiftTab} Shift tasks queued yet.</div>`;
+        listEl.innerHTML = `<div class="empty-box">No ${currentShiftTab} Shift matters queued yet.</div>`;
         return;
       }
       filtered.forEach(t => listEl.appendChild(buildTaskCard(t)));
@@ -966,9 +1259,9 @@
         return true;
       });
 
-      const labels = { week: 'Completed This Week', month: 'Completed This Month', all: 'All-Time Completed' };
+      const labels = { week: 'Cleared This Week', month: 'Cleared This Month', all: 'All-Time Cleared' };
       document.getElementById('rangeLabel').textContent = labels[analyticsRange];
-      document.getElementById('rangeTotalNum').textContent = `${scoped.length} Task${scoped.length === 1 ? '' : 's'}`;
+      document.getElementById('rangeTotalNum').textContent = `${scoped.length} Step${scoped.length === 1 ? '' : 's'}`;
 
       const amCount = scoped.filter(e => e.shift === 'AM').length;
       const pmCount = scoped.filter(e => e.shift === 'PM').length;
@@ -1010,7 +1303,7 @@
               <div class="cat-badge ${c.bg}">${c.code}</div>
               <div>
                 <div class="breakdown-name">${c.name}</div>
-                <div class="breakdown-sub">${count} task${count === 1 ? '' : 's'} completed</div>
+                <div class="breakdown-sub">${count} stage${count === 1 ? '' : 's'} / task${count === 1 ? '' : 's'} cleared</div>
               </div>
             </div>
             <div class="breakdown-right">
@@ -1044,7 +1337,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div>
             <div class="breakdown-name">${currentBadge}</div>
-            <div class="breakdown-sub">${totalAll} / ${nextTarget} tasks toward next rank</div>
+            <div class="breakdown-sub">${totalAll} / ${nextTarget} stages toward next rank</div>
           </div>
           <div class="breakdown-pct">${mPct}%</div>
         </div>
@@ -1064,7 +1357,7 @@
       const lit = history.filter(h => normalizeCategory(h.category) === 'litigation').length;
       const conv = history.filter(h => normalizeCategory(h.category) === 'conveyancing').length;
       const prob = history.filter(h => normalizeCategory(h.category) === 'probate').length;
-      const text = `Am2Pm Progress Summary:\n- Total Completed: ${total}\n- Litigation: ${lit}\n- Conveyancing: ${conv}\n- Probate: ${prob}`;
+      const text = `Am2Pm Progress Summary:\n- Total Stages & Tasks Cleared: ${total}\n- Litigation: ${lit}\n- Conveyancing: ${conv}\n- Probate: ${prob}`;
       navigator.clipboard.writeText(text);
       alert('Progress summary copied to clipboard.');
     }
