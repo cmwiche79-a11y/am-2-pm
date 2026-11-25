@@ -3,17 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Am2Pm — Daily Focus for Young Professionals</title>
+  <title>Am2Pm — Sorted Daily Focus & Milestone Tracker</title>
   <style>
     :root {
       --bg: #0f172a;
       --card: #1e293b;
+      --card-soft: #162033;
       --text: #f8fafc;
       --muted: #94a3b8;
       --am: #f59e0b;
       --pm: #38bdf8;
       --green: #10b981;
       --border: #334155;
+      --cat-litigation: #f43f5e;
+      --cat-conveyancing: #a855f7;
+      --cat-probate: #38bdf8;
     }
     * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
     body {
@@ -24,12 +28,12 @@
       display: flex;
       justify-content: center;
     }
-    .app { width: 100%; max-width: 640px; }
+    .app { width: 100%; max-width: 660px; padding-bottom: 48px; }
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       border-bottom: 1px solid var(--border);
       padding-bottom: 12px;
     }
@@ -44,12 +48,94 @@
       border-radius: 999px;
       font-weight: 600;
     }
+
+    /* Track Record & Milestone Card */
+    .stats-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .stats-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .stats-header span {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .milestone-pill {
+      font-size: 0.75rem;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--am);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .stat-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+    .stat-num { font-size: 1.3rem; font-weight: 800; color: var(--text); }
+    .stat-label { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+    .lane-summary {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      font-size: 0.74rem;
+      color: var(--muted);
+    }
+    .lane-chip {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .progress-wrap {
+      background: var(--bg);
+      border-radius: 999px;
+      height: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--am), var(--green));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .progress-caption {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* Input Area */
     .input-card {
       background: var(--card);
       padding: 16px;
       border-radius: 12px;
       border: 1px solid var(--border);
-      margin-bottom: 24px;
+      margin-bottom: 18px;
     }
     input[type="text"] {
       width: 100%;
@@ -62,41 +148,92 @@
       margin-bottom: 12px;
     }
     .controls {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 8px;
-      flex-wrap: wrap;
     }
     select, button {
-      padding: 10px 14px;
+      padding: 10px 12px;
       border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--bg);
       color: var(--text);
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       cursor: pointer;
     }
     button.primary {
+      grid-column: span 2;
       background: var(--green);
       color: #022c22;
       font-weight: 700;
       border: none;
-      margin-left: auto;
+      padding: 12px;
+      margin-top: 2px;
+    }
+
+    /* Sorting & Filter Bar */
+    .toolbar {
+      background: var(--card-soft);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .filter-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      padding: 5px 10px;
+      font-size: 0.78rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--muted);
+    }
+    .pill.active {
+      background: var(--text);
+      color: var(--bg);
+      font-weight: 700;
+      border-color: var(--text);
+    }
+    .sort-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .sort-row select {
+      padding: 5px 10px;
+      font-size: 0.8rem;
+    }
+
+    /* Lists */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0 10px;
     }
     .section-title {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin: 20px 0 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-weight: 700;
     }
     .am-title { color: var(--am); }
     .pm-title { color: var(--pm); }
+    .clear-btn { font-size: 0.75rem; padding: 4px 10px; color: var(--muted); }
     .task-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
     .task {
       background: var(--card);
       border: 1px solid var(--border);
+      border-left: 4px solid var(--border);
       padding: 12px 14px;
       border-radius: 10px;
       display: flex;
@@ -104,9 +241,33 @@
       align-items: center;
       gap: 10px;
     }
+    .task[data-cat="litigation"] { border-left-color: var(--cat-litigation); }
+    .task[data-cat="conveyancing"] { border-left-color: var(--cat-conveyancing); }
+    .task[data-cat="probate"] { border-left-color: var(--cat-probate); }
+    .task.done { opacity: 0.6; }
     .task.done span.title { text-decoration: line-through; color: var(--muted); }
-    .meta { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+    .cat-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-right: 6px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+    }
+    .meta { font-size: 0.75rem; color: var(--muted); margin-top: 6px; display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+    .actions { display: flex; gap: 6px; }
     .actions button { padding: 6px 10px; font-size: 0.8rem; }
+    .empty-msg {
+      font-size: 0.84rem;
+      color: var(--muted);
+      background: var(--card-soft);
+      border: 1px dashed var(--border);
+      padding: 14px;
+      border-radius: 10px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -114,52 +275,144 @@
     <header>
       <div>
         <h1><span class="am">Am</span>2<span class="pm">Pm</span></h1>
-        <small style="color: var(--muted)">Zero-data daily planner for the full hustle</small>
+        <small style="color: var(--muted)">Sorted daily focus & milestone tracker</small>
       </div>
       <span class="badge">Offline Ready</span>
     </header>
 
+    <!-- Track Record & Milestone Monitor -->
+    <section class="stats-card">
+      <div class="stats-header">
+        <span>📊 Track Record</span>
+        <span id="milestoneBadge" class="milestone-pill">🌱 Getting Started</span>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div id="weekCount" class="stat-num">0</div>
+          <div class="stat-label">This Week</div>
+        </div>
+        <div class="stat-box">
+          <div id="monthCount" class="stat-num">0</div>
+          <div class="stat-label">This Month</div>
+        </div>
+        <div class="stat-box">
+          <div id="splitStat" class="stat-num">0 / 0</div>
+          <div class="stat-label">AM vs PM Done</div>
+        </div>
+      </div>
+      <div id="laneSummary" class="lane-summary"></div>
+      <div class="progress-wrap">
+        <div id="milestoneBar" class="progress-fill"></div>
+      </div>
+      <div class="progress-caption">
+        <span id="totalDoneText">0 total tasks completed</span>
+        <span id="nextMilestoneText">Next: 10 tasks</span>
+      </div>
+    </section>
+
+    <!-- Task Capture with Sorting Categories -->
     <div class="input-card">
-      <input id="taskInput" type="text" placeholder="What needs to move forward today?" />
+      <input id="taskInput" type="text" placeholder="Enter task (e.g., Paginate record of appeal, Title search, Letters of administration)..." />
       <div class="controls">
+        <select id="categorySelect">
+          <option value="litigation">⚖️ Litigation</option>
+          <option value="conveyancing">🏡 Conveyancing</option>
+          <option value="probate">📜 Probate</option>
+        </select>
         <select id="shiftSelect">
-          <option value="AM">☀️ AM — Day Job / Core Work</option>
-          <option value="PM">🌙 PM — Study / Side Hustle</option>
+          <option value="AM">☀️ AM Shift</option>
+          <option value="PM">🌙 PM Shift</option>
         </select>
         <select id="powerSelect">
           <option value="⚡ Needs Power/Data">⚡ Needs Power/Data</option>
           <option value="🔋 Offline / Low-Battery">🔋 Offline / Low-Battery</option>
         </select>
-        <button class="primary" onclick="addTask()">+ Add Task</button>
+        <select id="prioritySelect">
+          <option value="1">🔥 High Priority</option>
+          <option value="2" selected>📌 Normal Priority</option>
+        </select>
+        <button class="primary" onclick="addTask()">+ Sort & Add Task</button>
       </div>
     </div>
 
-    <div class="section-title am-title">☀️ AM Shift — Career & Core Priorities</div>
+    <!-- Filter & Sort Toolbar -->
+    <div class="toolbar">
+      <div class="filter-pills" id="filterPills">
+        <button class="pill active" onclick="setFilter('all', this)">All Lanes</button>
+        <button class="pill" onclick="setFilter('litigation', this)">⚖️ Litigation</button>
+        <button class="pill" onclick="setFilter('conveyancing', this)">🏡 Conveyancing</button>
+        <button class="pill" onclick="setFilter('probate', this)">📜 Probate</button>
+      </div>
+      <div class="sort-row">
+        <span>Auto-Sort Lists By:</span>
+        <select id="sortSelect" onchange="render()">
+          <option value="priority">🔥 Priority First</option>
+          <option value="category">🗂️ Group by Category</option>
+          <option value="power">🔋 Offline / Power Mode</option>
+          <option value="newest">🕒 Newest Added</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- AM Shift -->
+    <div class="section-header">
+      <div class="section-title am-title">☀️ AM Shift — Core & Chambers</div>
+      <button class="clear-btn" onclick="clearCompleted('AM')">Clear Done</button>
+    </div>
     <ul id="amList" class="task-list"></ul>
 
-    <div class="section-title pm-title">🌙 PM Shift — Hustle, Exams & Growth</div>
+    <!-- PM Shift -->
+    <div class="section-header">
+      <div class="section-title pm-title">🌙 PM Shift — Prep & Follow-Ups</div>
+      <button class="clear-btn" onclick="clearCompleted('PM')">Clear Done</button>
+    </div>
     <ul id="pmList" class="task-list"></ul>
   </div>
 
   <script>
     let tasks = JSON.parse(localStorage.getItem('am2pm_tasks')) || [];
+    let history = JSON.parse(localStorage.getItem('am2pm_history')) || [];
+    let activeFilter = 'all';
+
+    const CATEGORIES = {
+      litigation: { label: '⚖️ Litigation', short: '⚖️ Litigation' },
+      conveyancing: { label: '🏡 Conveyancing', short: '🏡 Conveyancing' },
+      probate: { label: '📜 Probate', short: '📜 Probate' }
+    };
+
+    const MILESTONES = [
+      { target: 10, label: '🚀 Momentum Builder' },
+      { target: 25, label: '🔥 Consistent Grinder' },
+      { target: 50, label: '⚡ Dual-Shift Pro' },
+      { target: 100, label: '🏆 Century Achiever' },
+      { target: 250, label: '👑 Unstoppable' }
+    ];
+
+    function normalizeCategory(cat) {
+      return CATEGORIES[cat] ? cat : 'litigation';
+    }
 
     function save() {
       localStorage.setItem('am2pm_tasks', JSON.stringify(tasks));
+      localStorage.setItem('am2pm_history', JSON.stringify(history));
       render();
     }
 
     function addTask() {
       const input = document.getElementById('taskInput');
+      const category = normalizeCategory(document.getElementById('categorySelect').value);
       const shift = document.getElementById('shiftSelect').value;
       const power = document.getElementById('powerSelect').value;
+      const priority = Number(document.getElementById('prioritySelect').value);
       if (!input.value.trim()) return;
 
       tasks.unshift({
         id: Date.now(),
         title: input.value.trim(),
+        category,
         shift,
         power,
+        priority,
         done: false
       });
       input.value = '';
@@ -167,7 +420,25 @@
     }
 
     function toggleTask(id) {
-      tasks = tasks.map(t => t.id === id ? { ...t, done: !t.done } : t);
+      tasks = tasks.map(t => {
+        if (t.id !== id) return t;
+        const becomingDone = !t.done;
+        const cat = normalizeCategory(t.category);
+        if (becomingDone) {
+          if (!history.some(h => h.taskId === id)) {
+            history.push({
+              taskId: id,
+              category: cat,
+              shift: t.shift,
+              power: t.power,
+              completedAt: new Date().toISOString()
+            });
+          }
+        } else {
+          history = history.filter(h => h.taskId !== id);
+        }
+        return { ...t, category: cat, done: becomingDone };
+      });
       save();
     }
 
@@ -176,19 +447,126 @@
       save();
     }
 
+    function clearCompleted(shift) {
+      tasks = tasks.filter(t => !(t.shift === shift && t.done));
+      save();
+    }
+
+    function setFilter(cat, btn) {
+      activeFilter = cat;
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    }
+
+    function sortTasks(list) {
+      const mode = document.getElementById('sortSelect').value;
+      return [...list].sort((a, b) => {
+        if (a.done !== b.done) return a.done ? 1 : -1;
+        if (mode === 'priority') return (a.priority || 2) - (b.priority || 2);
+        if (mode === 'category') return normalizeCategory(a.category).localeCompare(normalizeCategory(b.category));
+        if (mode === 'power') return (a.power || '').localeCompare(b.power || '');
+        return b.id - a.id;
+      });
+    }
+
+    function getStartOfWeek(date) {
+      const d = new Date(date);
+      const day = d.getDay();
+      const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+      d.setDate(diff);
+      d.setHours(0, 0, 0, 0);
+      return d;
+    }
+
+    function renderStats() {
+      const now = new Date();
+      const startOfWeek = getStartOfWeek(now);
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+      let weekDone = 0, monthDone = 0, amDone = 0, pmDone = 0;
+      const catCounts = { litigation: 0, conveyancing: 0, probate: 0 };
+
+      history.forEach(entry => {
+        const d = new Date(entry.completedAt);
+        const cat = normalizeCategory(entry.category);
+        if (d >= startOfWeek) weekDone++;
+        if (d >= startOfMonth) monthDone++;
+        if (entry.shift === 'AM') amDone++;
+        if (entry.shift === 'PM') pmDone++;
+        catCounts[cat]++;
+      });
+
+      const total = history.length;
+      document.getElementById('weekCount').textContent = weekDone;
+      document.getElementById('monthCount').textContent = monthDone;
+      document.getElementById('splitStat').textContent = `${amDone} / ${pmDone}`;
+      document.getElementById('totalDoneText').textContent = `${total} total task${total === 1 ? '' : 's'} completed`;
+
+      const laneSummary = document.getElementById('laneSummary');
+      laneSummary.innerHTML = Object.keys(CATEGORIES).map(key =>
+        `<span class="lane-chip">${CATEGORIES[key].short}: <strong>${catCounts[key]}</strong></span>`
+      ).join('');
+
+      let currentBadge = '🌱 Getting Started';
+      let prevTarget = 0;
+      let nextTarget = MILESTONES[0].target;
+
+      for (let i = 0; i < MILESTONES.length; i++) {
+        if (total >= MILESTONES[i].target) {
+          currentBadge = MILESTONES[i].label;
+          prevTarget = MILESTONES[i].target;
+          nextTarget = MILESTONES[i + 1] ? MILESTONES[i + 1].target : MILESTONES[i].target;
+        } else {
+          nextTarget = MILESTONES[i].target;
+          break;
+        }
+      }
+
+      document.getElementById('milestoneBadge').textContent = currentBadge;
+
+      if (total >= MILESTONES[MILESTONES.length - 1].target) {
+        document.getElementById('milestoneBar').style.width = '100%';
+        document.getElementById('nextMilestoneText').textContent = 'Max Milestone Reached!';
+      } else {
+        const pct = Math.min(100, Math.round(((total - prevTarget) / (nextTarget - prevTarget)) * 100));
+        document.getElementById('milestoneBar').style.width = `${pct}%`;
+        document.getElementById('nextMilestoneText').textContent = `Next: ${nextTarget} tasks`;
+      }
+    }
+
     function render() {
+      renderStats();
       const amList = document.getElementById('amList');
       const pmList = document.getElementById('pmList');
       amList.innerHTML = '';
       pmList.innerHTML = '';
 
-      tasks.forEach(task => {
+      const filtered = tasks.filter(t => activeFilter === 'all' || normalizeCategory(t.category) === activeFilter);
+      const amTasks = sortTasks(filtered.filter(t => t.shift === 'AM'));
+      const pmTasks = sortTasks(filtered.filter(t => t.shift === 'PM'));
+
+      if (amTasks.length === 0) {
+        amList.innerHTML = `<div class="empty-msg">No AM tasks in this view.</div>`;
+      }
+      if (pmTasks.length === 0) {
+        pmList.innerHTML = `<div class="empty-msg">No PM tasks in this view.</div>`;
+      }
+
+      [...amTasks, ...pmTasks].forEach(task => {
+        const catKey = normalizeCategory(task.category);
+        const catObj = CATEGORIES[catKey];
+        const prioBadge = task.priority === 1 ? '🔥 ' : '';
         const li = document.createElement('li');
         li.className = `task ${task.done ? 'done' : ''}`;
+        li.setAttribute('data-cat', catKey);
         li.innerHTML = `
           <div>
-            <span class="title">${task.title}</span>
-            <div class="meta">${task.power}</div>
+            <span class="title">${prioBadge}${task.title}</span>
+            <div class="meta">
+              <span class="cat-tag">${catObj.short}</span>
+              <span>${task.power}</span>
+            </div>
           </div>
           <div class="actions">
             <button onclick="toggleTask(${task.id})">${task.done ? 'Undo' : '✓'}</button>
