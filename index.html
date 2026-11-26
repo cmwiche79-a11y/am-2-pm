@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Am2Pm — Daily Focus & Matter Stage Tracker</title>
+  <title>Am2Pm — Daily Focus, Matter Stages & Wins Folder</title>
   <style>
     :root {
       --bg: #f4f7fc;
@@ -36,11 +36,96 @@
 
     .app {
       width: 100%;
-      max-width: 480px;
+      max-width: 520px;
       background: var(--bg);
       min-height: 100vh;
       padding: 18px 16px 96px;
       position: relative;
+    }
+
+    /* Inception Setup Modal */
+    .onboarding-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 100;
+    }
+    .onboarding-overlay.open { display: flex; }
+    .onboarding-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--white);
+      border-radius: 22px;
+      padding: 24px 20px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25);
+    }
+    .onboarding-badge {
+      display: inline-block;
+      background: var(--royal-soft);
+      color: var(--royal);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+    .onboarding-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .onboarding-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.45;
+      margin-bottom: 18px;
+    }
+    .time-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .time-field label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+    .time-field input[type="time"] {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+    }
+    .time-field input[type="time"]:focus {
+      border-color: var(--royal);
+      background: var(--white);
+    }
+    .schedule-note {
+      background: var(--royal-soft);
+      border: 1px solid var(--royal-border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.76rem;
+      color: var(--royal-dark);
+      line-height: 1.45;
+      margin-bottom: 16px;
     }
 
     /* Top Header */
@@ -245,7 +330,7 @@
       box-shadow: var(--shadow);
       transition: opacity 0.2s ease;
     }
-    .task-card.done { opacity: 0.58; }
+    .task-card.done { opacity: 0.62; }
     .task-top-row {
       display: flex;
       align-items: center;
@@ -308,7 +393,9 @@
     .task-actions {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
     .check-circle {
       min-width: 32px;
@@ -319,7 +406,7 @@
       background: var(--royal-soft);
       color: var(--royal);
       font-weight: 800;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -330,14 +417,28 @@
       border-color: var(--royal);
       color: var(--white);
     }
+    .win-pill-btn {
+      height: 28px;
+      padding: 0 8px;
+      border-radius: 999px;
+      border: 1px solid var(--royal-border);
+      background: var(--white);
+      color: var(--royal-dark);
+      font-weight: 700;
+      font-size: 0.68rem;
+      cursor: pointer;
+    }
+    .win-pill-btn:hover {
+      background: var(--royal-soft);
+    }
     .del-btn {
       background: none;
       border: none;
       color: #94a3b8;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       cursor: pointer;
-      padding: 4px 6px;
+      padding: 4px 5px;
     }
     .del-btn:hover { color: #dc2626; }
 
@@ -469,12 +570,13 @@
       box-shadow: var(--shadow);
     }
     .segmented.three { grid-template-columns: repeat(3, 1fr); }
+    .segmented.four { grid-template-columns: repeat(4, 1fr); }
     .seg-btn {
       border: none;
       background: transparent;
-      padding: 9px;
+      padding: 9px 6px;
       border-radius: 10px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: var(--muted);
       cursor: pointer;
@@ -552,6 +654,57 @@
       border-radius: 999px;
     }
 
+    /* Wins Folder Cards */
+    .win-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+    .win-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .win-title {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+    .win-date {
+      font-size: 0.74rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .win-field {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      color: var(--text);
+    }
+    .win-field-label {
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--royal);
+      display: block;
+      margin-bottom: 2px;
+    }
+    .win-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--bg);
+    }
+
     /* Bottom Navigation Bar */
     .bottom-nav {
       position: fixed;
@@ -559,12 +712,12 @@
       left: 50%;
       transform: translateX(-50%);
       width: 100%;
-      max-width: 480px;
+      max-width: 520px;
       background: var(--white);
       border-top: 1px solid var(--border);
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      padding: 10px 6px 14px;
+      grid-template-columns: repeat(5, 1fr);
+      padding: 10px 4px 14px;
       z-index: 40;
     }
     .nav-btn {
@@ -575,14 +728,14 @@
       align-items: center;
       justify-content: center;
       color: var(--muted);
-      font-size: 0.76rem;
+      font-size: 0.72rem;
       font-weight: 700;
       cursor: pointer;
-      padding: 4px 0;
+      padding: 4px 2px;
     }
     .nav-btn.active { color: var(--royal); }
 
-    /* Slide-Up Quick Add Bottom Sheet */
+    /* Slide-Up Bottom Sheets */
     .sheet-backdrop {
       position: fixed;
       inset: 0;
@@ -595,7 +748,7 @@
     .sheet-backdrop.open { display: flex; }
     .sheet {
       width: 100%;
-      max-width: 480px;
+      max-width: 520px;
       background: var(--white);
       border-radius: 24px 24px 0 0;
       padding: 20px 18px 28px;
@@ -615,18 +768,26 @@
       font-weight: 800;
       margin-bottom: 12px;
     }
-    .sheet input[type="text"] {
+    .sheet input[type="text"],
+    .sheet input[type="date"],
+    .sheet textarea {
       width: 100%;
-      padding: 13px 14px;
+      padding: 12px 14px;
       border-radius: 12px;
       border: 1.5px solid var(--border);
-      font-size: 0.95rem;
-      margin-bottom: 12px;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
       outline: none;
+      font-family: inherit;
     }
-    .sheet input[type="text"]:focus { border-color: var(--royal); }
+    .sheet textarea {
+      min-height: 64px;
+      resize: vertical;
+    }
+    .sheet input:focus,
+    .sheet textarea:focus { border-color: var(--royal); }
     .chip-label {
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 700;
       color: var(--muted);
       text-transform: uppercase;
@@ -653,9 +814,15 @@
       color: var(--white);
       border-color: var(--royal);
     }
+    .auto-hint {
+      font-size: 0.74rem;
+      color: var(--royal);
+      font-weight: 600;
+      margin-top: 6px;
+    }
     .save-task-btn {
       width: 100%;
-      margin-top: 16px;
+      margin-top: 14px;
       padding: 14px;
       border-radius: 14px;
       border: none;
@@ -681,6 +848,35 @@
 </head>
 <body>
   <div class="app">
+    <!-- Inception Schedule Setup Modal -->
+    <div class="onboarding-overlay" id="onboardingModal">
+      <div class="onboarding-card">
+        <div class="onboarding-badge">Workspace Setup</div>
+        <div class="onboarding-title">Set Your Working Hours</div>
+        <div class="onboarding-sub">
+          Am2Pm splits your day into AM and PM shifts based on your actual clock-in and clock-off schedule. You can update this anytime in Profile.
+        </div>
+
+        <div class="time-grid">
+          <div class="time-field">
+            <label for="setupStartTime">Start Work</label>
+            <input id="setupStartTime" type="time" value="08:00" oninput="updateSetupPreview()" />
+          </div>
+          <div class="time-field">
+            <label for="setupEndTime">Leave Work</label>
+            <input id="setupEndTime" type="time" value="17:00" oninput="updateSetupPreview()" />
+          </div>
+        </div>
+
+        <div class="schedule-note" id="setupPreviewText">
+          AM Shift: 08:00 – 12:30 (Court, registry & urgent items)<br>
+          PM Shift: 12:30 – 17:00 & evening prep
+        </div>
+
+        <button class="save-task-btn" style="margin-top: 4px;" onclick="saveScheduleSetup()">Confirm Schedule</button>
+      </div>
+    </div>
+
     <!-- Top Header -->
     <div class="topbar">
       <div>
@@ -696,7 +892,7 @@
     <div id="view-today" class="view active">
       <div class="hero-card">
         <div class="hero-top">
-          <span>Today's Focus Score</span>
+          <span id="heroWindowLabel">Today's Focus Score</span>
           <button class="power-toggle" id="powerModeBtn" onclick="toggleBlackoutMode()">Power & Data On</button>
         </div>
         <div class="hero-score" id="heroScore">0 / 0 Done</div>
@@ -743,7 +939,7 @@
         <button class="seg-btn" id="tab-PM" onclick="setShiftTab('PM')">PM Shift</button>
       </div>
       <div class="sec-head">
-        <span class="sec-title" id="shiftHeading">AM Shift — Chambers & Court</span>
+        <span class="sec-title" id="shiftHeading">AM Shift</span>
         <button class="sec-action" onclick="openSheet()">+ Add</button>
       </div>
       <div id="shiftTaskList" class="task-list"></div>
@@ -758,8 +954,8 @@
       </div>
 
       <div class="white-card">
-        <div class="big-stat-label" id="rangeLabel">Completed This Week</div>
-        <div class="big-stat-num" id="rangeTotalNum">0 Items</div>
+        <div class="big-stat-label" id="rangeLabel">Cleared This Week</div>
+        <div class="big-stat-num" id="rangeTotalNum">0 Steps</div>
         <div class="big-stat-sub" id="amPmRatioText">0 AM Shift  /  0 PM Shift</div>
         <div class="bar-chart" id="weeklyBarChart"></div>
       </div>
@@ -775,7 +971,27 @@
       <div class="white-card" id="milestoneCard"></div>
     </div>
 
-    <!-- VIEW 4: PROFILE & SETTINGS -->
+    <!-- VIEW 4: WINS FOLDER -->
+    <div id="view-wins" class="view">
+      <div class="sec-head">
+        <span class="sec-title">Wins Folder</span>
+        <div class="sec-actions">
+          <button class="sec-action secondary" onclick="copyAllWins()">Copy All</button>
+          <button class="sec-action" onclick="openWinSheet()">+ Log Win</button>
+        </div>
+      </div>
+
+      <div class="segmented four">
+        <button class="seg-btn active" id="win-filter-all" onclick="setWinFilter('all')">All</button>
+        <button class="seg-btn" id="win-filter-litigation" onclick="setWinFilter('litigation')">LIT</button>
+        <button class="seg-btn" id="win-filter-conveyancing" onclick="setWinFilter('conveyancing')">CON</button>
+        <button class="seg-btn" id="win-filter-probate" onclick="setWinFilter('probate')">PRB</button>
+      </div>
+
+      <div id="winsList"></div>
+    </div>
+
+    <!-- VIEW 5: PROFILE & SETTINGS -->
     <div id="view-profile" class="view">
       <div class="white-card" style="text-align: center; padding: 24px 18px;">
         <div style="width: 60px; height: 60px; border-radius: 50%; background: var(--royal-soft); color: var(--royal); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; margin: 0 auto 10px;">A2P</div>
@@ -787,10 +1003,24 @@
       <div class="white-card">
         <div class="breakdown-row">
           <div>
+            <div class="breakdown-name">Working Hours</div>
+            <div class="breakdown-sub" id="profScheduleSub">08:00 – 17:00 (PM cutover at 12:30)</div>
+          </div>
+          <button class="sec-action" onclick="openScheduleEditor()">Edit</button>
+        </div>
+        <div class="breakdown-row">
+          <div>
             <div class="breakdown-name">Total Milestones & Stages Cleared</div>
             <div class="breakdown-sub">All-time recorded completions</div>
           </div>
           <div class="breakdown-pct" id="profTotal">0</div>
+        </div>
+        <div class="breakdown-row">
+          <div>
+            <div class="breakdown-name">Recorded Wins</div>
+            <div class="breakdown-sub">Saved achievements in Wins Folder</div>
+          </div>
+          <div class="breakdown-pct" id="profWins">0</div>
         </div>
         <div class="breakdown-row">
           <div>
@@ -802,14 +1032,14 @@
         <div class="breakdown-row">
           <div>
             <div class="breakdown-name">Copy Progress Summary</div>
-            <div class="breakdown-sub">Copy weekly/monthly report to clipboard</div>
+            <div class="breakdown-sub">Copy summary report to clipboard</div>
           </div>
           <button class="sec-action" onclick="copyReport()">Copy</button>
         </div>
       </div>
     </div>
 
-    <!-- Bottom Navigation -->
+    <!-- 5-Tab Bottom Navigation -->
     <nav class="bottom-nav">
       <button class="nav-btn active" id="nav-today" onclick="switchView('today')">
         <span>Today</span>
@@ -820,17 +1050,20 @@
       <button class="nav-btn" id="nav-analytics" onclick="switchView('analytics')">
         <span>Track Record</span>
       </button>
+      <button class="nav-btn" id="nav-wins" onclick="switchView('wins')">
+        <span>Wins</span>
+      </button>
       <button class="nav-btn" id="nav-profile" onclick="switchView('profile')">
         <span>Profile</span>
       </button>
     </nav>
 
-    <!-- Slide-Up Quick Add Bottom Sheet -->
+    <!-- Slide-Up Quick Add Task Bottom Sheet -->
     <div class="sheet-backdrop" id="sheetBackdrop" onclick="closeSheetOnBg(event)">
       <div class="sheet">
         <div class="sheet-handle"></div>
         <div class="sheet-title">New Matter or Task</div>
-        <input id="taskInput" type="text" placeholder="e.g., Stand 4122 Transfer, Estate of J. Banda..." />
+        <input id="taskInput" type="text" placeholder="e.g., Stand 4122 Transfer, Court Mention, Draft Affidavit..." oninput="recomputeAutoShift()" />
 
         <div class="chip-label">Practice Lane</div>
         <div class="chip-row" id="catChips">
@@ -845,23 +1078,59 @@
           <button type="button" class="choice-chip" data-val="single" onclick="pickChip('modeChips', this)">Single Task</button>
         </div>
 
-        <div class="chip-label">Shift & Priority</div>
-        <div class="chip-row" id="shiftChips">
-          <button type="button" class="choice-chip selected" data-val="AM" onclick="pickChip('shiftChips', this)">AM Shift</button>
-          <button type="button" class="choice-chip" data-val="PM" onclick="pickChip('shiftChips', this)">PM Shift</button>
+        <div class="chip-label">Priority & Connectivity</div>
+        <div class="chip-row" id="prioChips">
+          <button type="button" class="choice-chip" data-val="1" onclick="pickTaskRuleChip('prioChips', this)">High Priority</button>
+          <button type="button" class="choice-chip selected" data-val="2" onclick="pickTaskRuleChip('prioChips', this)">Normal</button>
         </div>
-        <div class="chip-row" id="prioChips" style="margin-top: 8px;">
-          <button type="button" class="choice-chip" data-val="1" onclick="pickChip('prioChips', this)">High Priority</button>
-          <button type="button" class="choice-chip selected" data-val="2" onclick="pickChip('prioChips', this)">Normal</button>
+        <div class="chip-row" id="powerChips" style="margin-top: 8px;">
+          <button type="button" class="choice-chip selected" data-val="Needs Power/Data" onclick="pickTaskRuleChip('powerChips', this)">Needs Power/Data</button>
+          <button type="button" class="choice-chip" data-val="Offline / Low-Battery" onclick="pickTaskRuleChip('powerChips', this)">Offline Ready</button>
         </div>
 
-        <div class="chip-label">Power & Connectivity</div>
-        <div class="chip-row" id="powerChips">
-          <button type="button" class="choice-chip selected" data-val="Needs Power/Data" onclick="pickChip('powerChips', this)">Needs Power/Data</button>
-          <button type="button" class="choice-chip" data-val="Offline / Low-Battery" onclick="pickChip('powerChips', this)">Offline Ready</button>
+        <div class="chip-label">Assigned Shift (Auto-Routed, Tap to Override)</div>
+        <div class="chip-row" id="shiftChips">
+          <button type="button" class="choice-chip selected" data-val="AM" onclick="manualPickShift(this)">AM Shift</button>
+          <button type="button" class="choice-chip" data-val="PM" onclick="manualPickShift(this)">PM Shift</button>
         </div>
+        <div class="auto-hint" id="shiftAutoReason">Auto-routed based on your 08:00 – 17:00 schedule</div>
 
         <button class="save-task-btn" onclick="addTask()">Save to Schedule</button>
+      </div>
+    </div>
+
+    <!-- Slide-Up Wins Folder Sheet -->
+    <div class="sheet-backdrop" id="winSheetBackdrop" onclick="closeWinSheetOnBg(event)">
+      <div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title" id="winSheetTitle">Save to Wins Folder</div>
+
+        <div class="chip-label">Achievement / Matter Title</div>
+        <input id="winTitleInput" type="text" placeholder="e.g., Cleared contested query and lodged transfer" />
+
+        <div class="chip-label">Practice Lane</div>
+        <div class="chip-row" id="winCatChips">
+          <button type="button" class="choice-chip selected" data-val="litigation" onclick="pickChip('winCatChips', this)">Litigation</button>
+          <button type="button" class="choice-chip" data-val="conveyancing" onclick="pickChip('winCatChips', this)">Conveyancing</button>
+          <button type="button" class="choice-chip" data-val="probate" onclick="pickChip('winCatChips', this)">Probate</button>
+        </div>
+
+        <div class="chip-label">Date (When did it happen?)</div>
+        <input id="winDateInput" type="date" />
+
+        <div class="chip-label">Problem (What needed solving?)</div>
+        <textarea id="winProblemInput" placeholder="Hurdle, query, delay, or issue encountered..."></textarea>
+
+        <div class="chip-label">Action (What did you personally do?)</div>
+        <textarea id="winActionInput" placeholder="Steps taken, drafting, follow-up, or resolution..."></textarea>
+
+        <div class="chip-label">Impact (What was the result?)</div>
+        <textarea id="winImpactInput" placeholder="Outcome for the client, file, or team..."></textarea>
+
+        <div class="chip-label">Evidence (How can you demonstrate it?)</div>
+        <input id="winEvidenceInput" type="text" placeholder="e.g., Filed document, receipt, correspondence, draft..." />
+
+        <button class="save-task-btn" onclick="saveWinEntry()">Save Win</button>
       </div>
     </div>
   </div>
@@ -869,11 +1138,18 @@
   <script>
     let tasks = JSON.parse(localStorage.getItem('am2pm_tasks')) || [];
     let history = JSON.parse(localStorage.getItem('am2pm_history')) || [];
+    let wins = JSON.parse(localStorage.getItem('am2pm_wins')) || [];
+    let workSchedule = JSON.parse(localStorage.getItem('am2pm_schedule')) || null;
+
     let openDrawers = {};
     let homeCatFilter = 'all';
+    let winCatFilter = 'all';
     let blackoutMode = false;
     let currentShiftTab = 'AM';
     let analyticsRange = 'week';
+    let pendingWinSourceTaskId = null;
+    let editingWinId = null;
+    let userOverrodeShift = false;
 
     const CATEGORIES = {
       litigation: { name: 'Litigation', code: 'LIT', bg: 'bg-litigation' },
@@ -889,13 +1165,147 @@
       { target: 250, label: 'Unstoppable' }
     ];
 
+    function timeToMinutes(hhmm) {
+      const [h, m] = (hhmm || '08:00').split(':').map(Number);
+      return (h * 60) + (m || 0);
+    }
+
+    function minutesToTime(totalMins) {
+      const clamped = ((totalMins % 1440) + 1440) % 1440;
+      const h = String(Math.floor(clamped / 60)).padStart(2, '0');
+      const m = String(clamped % 60).padStart(2, '0');
+      return `${h}:${m}`;
+    }
+
+    function computeCutoverTime(startStr, endStr) {
+      const s = timeToMinutes(startStr);
+      let e = timeToMinutes(endStr);
+      if (e <= s) e += 1440;
+      const mid = Math.round((s + e) / 2);
+      return minutesToTime(mid);
+    }
+
+    function getActiveSchedule() {
+      if (workSchedule && workSchedule.start && workSchedule.end) {
+        return {
+          start: workSchedule.start,
+          end: workSchedule.end,
+          cutover: workSchedule.cutover || computeCutoverTime(workSchedule.start, workSchedule.end)
+        };
+      }
+      return { start: '08:00', end: '17:00', cutover: '12:30' };
+    }
+
+    function updateSetupPreview() {
+      const start = document.getElementById('setupStartTime').value || '08:00';
+      const end = document.getElementById('setupEndTime').value || '17:00';
+      const cutover = computeCutoverTime(start, end);
+      document.getElementById('setupPreviewText').innerHTML =
+        `AM Shift: <strong>${start} – ${cutover}</strong> (Court, registry & urgent items)<br>` +
+        `PM Shift: <strong>${cutover} – ${end}</strong> & evening prep`;
+    }
+
+    function saveScheduleSetup() {
+      const start = document.getElementById('setupStartTime').value || '08:00';
+      const end = document.getElementById('setupEndTime').value || '17:00';
+      const cutover = computeCutoverTime(start, end);
+      workSchedule = { start, end, cutover };
+      localStorage.setItem('am2pm_schedule', JSON.stringify(workSchedule));
+      document.getElementById('onboardingModal').classList.remove('open');
+      renderAll();
+    }
+
+    function openScheduleEditor() {
+      const sched = getActiveSchedule();
+      document.getElementById('setupStartTime').value = sched.start;
+      document.getElementById('setupEndTime').value = sched.end;
+      updateSetupPreview();
+      document.getElementById('onboardingModal').classList.add('open');
+    }
+
+    function determineAutoShift(title, priority, power) {
+      const sched = getActiveSchedule();
+      const now = new Date();
+      const nowMins = now.getHours() * 60 + now.getMinutes();
+      const startMins = timeToMinutes(sched.start);
+      const cutoverMins = timeToMinutes(sched.cutover);
+      const endMins = timeToMinutes(sched.end);
+
+      const isOffline = (power || '').toLowerCase().includes('offline');
+      const isUrgent = Number(priority) === 1;
+      const externalKeywords = /\b(court|hearing|mention|registry|lodge|lodgement|file|filing|zra|consent|serve|service|search|stamp|bank|client)\b/i;
+      const isExternal = externalKeywords.test(title || '');
+
+      if (nowMins >= endMins) {
+        return {
+          shift: 'AM',
+          reason: `After ${sched.end} clock-off — queued for tomorrow's AM Shift (${sched.start})`
+        };
+      }
+      if (isUrgent || isExternal) {
+        return {
+          shift: 'AM',
+          reason: `AM Shift (${sched.start} – ${sched.cutover}) — urgent or court/registry dependent`
+        };
+      }
+      if (nowMins >= cutoverMins || isOffline) {
+        return {
+          shift: 'PM',
+          reason: isOffline
+            ? `PM Shift (${sched.cutover} – ${sched.end}) — self-paced / offline chambers work`
+            : `PM Shift (${sched.cutover} – ${sched.end}) — logged in second half of workday`
+        };
+      }
+      if (nowMins < startMins) {
+        return {
+          shift: 'AM',
+          reason: `AM Shift (${sched.start} – ${sched.cutover}) — queued for morning start`
+        };
+      }
+      return {
+        shift: 'AM',
+        reason: `AM Shift (${sched.start} – ${sched.cutover}) — active morning window`
+      };
+    }
+
+    function recomputeAutoShift() {
+      if (userOverrodeShift) return;
+      const title = document.getElementById('taskInput').value;
+      const priority = getChipVal('prioChips');
+      const power = getChipVal('powerChips');
+      const decision = determineAutoShift(title, priority, power);
+      setChipGroupValue('shiftChips', decision.shift);
+      document.getElementById('shiftAutoReason').textContent = decision.reason;
+    }
+
+    function pickTaskRuleChip(groupId, btn) {
+      pickChip(groupId, btn);
+      recomputeAutoShift();
+    }
+
+    function manualPickShift(btn) {
+      userOverrodeShift = true;
+      pickChip('shiftChips', btn);
+      const val = btn.getAttribute('data-val');
+      document.getElementById('shiftAutoReason').textContent = `Manually assigned to ${val} Shift`;
+    }
+
     function normalizeCategory(cat) {
       return CATEGORIES[cat] ? cat : 'litigation';
+    }
+
+    function todayISO() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
     }
 
     function save() {
       localStorage.setItem('am2pm_tasks', JSON.stringify(tasks));
       localStorage.setItem('am2pm_history', JSON.stringify(history));
+      localStorage.setItem('am2pm_wins', JSON.stringify(wins));
       renderAll();
     }
 
@@ -908,6 +1318,8 @@
     }
 
     function openSheet() {
+      userOverrodeShift = false;
+      recomputeAutoShift();
       document.getElementById('sheetBackdrop').classList.add('open');
       setTimeout(() => document.getElementById('taskInput').focus(), 100);
     }
@@ -916,6 +1328,160 @@
       if (e.target.id === 'sheetBackdrop') {
         document.getElementById('sheetBackdrop').classList.remove('open');
       }
+    }
+
+    function setChipGroupValue(groupId, val) {
+      document.querySelectorAll(`#${groupId} .choice-chip`).forEach(c => {
+        c.classList.toggle('selected', c.getAttribute('data-val') === val);
+      });
+    }
+
+    function openWinSheet(prefillTask = null, existingWin = null) {
+      editingWinId = existingWin ? existingWin.id : null;
+      pendingWinSourceTaskId = prefillTask ? prefillTask.id : null;
+
+      document.getElementById('winSheetTitle').textContent = existingWin
+        ? 'Edit Win Entry'
+        : prefillTask
+          ? 'Complete & Save to Wins Folder'
+          : 'Log a Win';
+
+      const defaultCat = existingWin
+        ? normalizeCategory(existingWin.category)
+        : prefillTask
+          ? normalizeCategory(prefillTask.category)
+          : 'litigation';
+
+      setChipGroupValue('winCatChips', defaultCat);
+
+      const clearedStagesText = prefillTask && Array.isArray(prefillTask.stages) && prefillTask.stages.length > 0
+        ? prefillTask.stages.filter(s => s.done).map(s => s.label).join('; ')
+        : '';
+
+      document.getElementById('winTitleInput').value = existingWin
+        ? existingWin.title
+        : prefillTask
+          ? prefillTask.title
+          : '';
+      document.getElementById('winDateInput').value = existingWin
+        ? existingWin.date
+        : todayISO();
+      document.getElementById('winProblemInput').value = existingWin
+        ? existingWin.problem
+        : '';
+      document.getElementById('winActionInput').value = existingWin
+        ? existingWin.action
+        : clearedStagesText
+          ? `Cleared stages: ${clearedStagesText}`
+          : '';
+      document.getElementById('winImpactInput').value = existingWin
+        ? existingWin.impact
+        : '';
+      document.getElementById('winEvidenceInput').value = existingWin
+        ? existingWin.evidence
+        : '';
+
+      document.getElementById('winSheetBackdrop').classList.add('open');
+      setTimeout(() => document.getElementById('winTitleInput').focus(), 100);
+    }
+
+    function openWinFromTask(taskId) {
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+      openWinSheet(task, null);
+    }
+
+    function openEditWin(winId) {
+      const win = wins.find(w => w.id === winId);
+      if (!win) return;
+      openWinSheet(null, win);
+    }
+
+    function closeWinSheetOnBg(e) {
+      if (e.target.id === 'winSheetBackdrop') {
+        document.getElementById('winSheetBackdrop').classList.remove('open');
+        pendingWinSourceTaskId = null;
+        editingWinId = null;
+      }
+    }
+
+    function saveWinEntry() {
+      const title = document.getElementById('winTitleInput').value.trim();
+      if (!title) return;
+
+      const entry = {
+        id: editingWinId || Date.now(),
+        category: normalizeCategory(getChipVal('winCatChips')),
+        title,
+        date: document.getElementById('winDateInput').value || todayISO(),
+        problem: document.getElementById('winProblemInput').value.trim(),
+        action: document.getElementById('winActionInput').value.trim(),
+        impact: document.getElementById('winImpactInput').value.trim(),
+        evidence: document.getElementById('winEvidenceInput').value.trim()
+      };
+
+      if (editingWinId) {
+        wins = wins.map(w => w.id === editingWinId ? entry : w);
+      } else {
+        wins.unshift(entry);
+      }
+
+      if (pendingWinSourceTaskId) {
+        tasks = tasks.map(t => {
+          if (t.id !== pendingWinSourceTaskId) return t;
+          const cat = normalizeCategory(t.category);
+          recordHistory(t.id, cat, t.shift, t.power);
+          const updatedStages = Array.isArray(t.stages)
+            ? t.stages.map(s => ({ ...s, done: true }))
+            : [];
+          return { ...t, category: cat, stages: updatedStages, done: true };
+        });
+      }
+
+      pendingWinSourceTaskId = null;
+      editingWinId = null;
+      document.getElementById('winSheetBackdrop').classList.remove('open');
+      save();
+      switchView('wins');
+    }
+
+    function deleteWin(winId) {
+      wins = wins.filter(w => w.id !== winId);
+      save();
+    }
+
+    function setWinFilter(cat) {
+      winCatFilter = cat;
+      ['all', 'litigation', 'conveyancing', 'probate'].forEach(k => {
+        document.getElementById(`win-filter-${k}`).classList.toggle('active', winCatFilter === k);
+      });
+      renderWins();
+    }
+
+    function formatWinText(w) {
+      const catName = CATEGORIES[normalizeCategory(w.category)].name;
+      const lines = [
+        `WIN: ${w.title} (${catName} | ${w.date})`
+      ];
+      if (w.problem) lines.push(`Problem: ${w.problem}`);
+      if (w.action) lines.push(`Action: ${w.action}`);
+      if (w.impact) lines.push(`Impact: ${w.impact}`);
+      if (w.evidence) lines.push(`Evidence: ${w.evidence}`);
+      return lines.join('\n');
+    }
+
+    function copySingleWin(winId) {
+      const w = wins.find(item => item.id === winId);
+      if (!w) return;
+      navigator.clipboard.writeText(formatWinText(w));
+      alert('Win entry copied to clipboard.');
+    }
+
+    function copyAllWins() {
+      if (wins.length === 0) return;
+      const text = wins.map(formatWinText).join('\n\n---\n\n');
+      navigator.clipboard.writeText(text);
+      alert('All wins copied to clipboard.');
     }
 
     function pickChip(groupId, btn) {
@@ -1097,8 +1663,6 @@
       currentShiftTab = shift;
       document.getElementById('tab-AM').classList.toggle('active', shift === 'AM');
       document.getElementById('tab-PM').classList.toggle('active', shift === 'PM');
-      document.getElementById('shiftHeading').textContent =
-        shift === 'AM' ? 'AM Shift — Chambers & Court' : 'PM Shift — Prep & Follow-Ups';
       renderShifts();
     }
 
@@ -1181,6 +1745,7 @@
             </div>
           </div>
           <div class="task-actions">
+            <button class="win-pill-btn" onclick="openWinFromTask(${task.id})">Save Win</button>
             <button class="check-circle" onclick="toggleTask(${task.id})">${task.done ? 'DONE' : 'CLOSE'}</button>
             <button class="del-btn" onclick="deleteTask(${task.id})">DEL</button>
           </div>
@@ -1191,10 +1756,12 @@
     }
 
     function renderHome() {
+      const sched = getActiveSchedule();
       const total = tasks.length;
       const done = tasks.filter(t => t.done).length;
       const pct = total === 0 ? 0 : Math.round((done / total) * 100);
 
+      document.getElementById('heroWindowLabel').textContent = `Today's Focus (${sched.start} – ${sched.end})`;
       document.getElementById('heroScore').textContent = `${done} / ${total} Done`;
       document.getElementById('heroSub').textContent =
         total === 0 ? 'Tap + Add Task to plan your AM and PM shifts' : `${pct}% of today's active queue completed`;
@@ -1228,6 +1795,12 @@
     }
 
     function renderShifts() {
+      const sched = getActiveSchedule();
+      document.getElementById('shiftHeading').textContent =
+        currentShiftTab === 'AM'
+          ? `AM Shift (${sched.start} – ${sched.cutover}) — Court, Registry & Urgent`
+          : `PM Shift (${sched.cutover} – ${sched.end}+) — Chambers & Prep`;
+
       const listEl = document.getElementById('shiftTaskList');
       listEl.innerHTML = '';
       const filtered = sortList(tasks.filter(t => t.shift === currentShiftTab));
@@ -1346,10 +1919,51 @@
         </div>
       `;
 
+      const sched = getActiveSchedule();
+      document.getElementById('profScheduleSub').textContent = `${sched.start} – ${sched.end} (PM cutover at ${sched.cutover})`;
       document.getElementById('profileRankBadge').textContent = currentBadge;
       document.getElementById('profTotal').textContent = totalAll;
+      document.getElementById('profWins').textContent = wins.length;
       document.getElementById('profOffline').textContent =
         history.filter(h => (h.power || '').toLowerCase().includes('offline')).length;
+    }
+
+    function renderWins() {
+      const container = document.getElementById('winsList');
+      const filtered = winCatFilter === 'all'
+        ? wins
+        : wins.filter(w => normalizeCategory(w.category) === winCatFilter);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="empty-box">No wins recorded yet. Tap <strong>Save Win</strong> on a task card or <strong>+ Log Win</strong> above to record an achievement.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(w => {
+        const cat = CATEGORIES[normalizeCategory(w.category)];
+        return `
+          <div class="win-card">
+            <div class="win-top">
+              <div style="display:flex; gap:10px; align-items:center;">
+                <div class="cat-badge ${cat.bg}">${cat.code}</div>
+                <div>
+                  <div class="win-title">${w.title}</div>
+                  <div class="win-date">${cat.name} / ${w.date || ''}</div>
+                </div>
+              </div>
+            </div>
+            ${w.problem ? `<div class="win-field"><span class="win-field-label">Problem</span>${w.problem}</div>` : ''}
+            ${w.action ? `<div class="win-field"><span class="win-field-label">Action</span>${w.action}</div>` : ''}
+            ${w.impact ? `<div class="win-field"><span class="win-field-label">Impact</span>${w.impact}</div>` : ''}
+            ${w.evidence ? `<div class="win-field"><span class="win-field-label">Evidence</span>${w.evidence}</div>` : ''}
+            <div class="win-footer">
+              <button class="sec-action" onclick="copySingleWin(${w.id})">Copy</button>
+              <button class="sec-action secondary" onclick="openEditWin(${w.id})">Edit</button>
+              <button class="del-btn" onclick="deleteWin(${w.id})">DEL</button>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     function copyReport() {
@@ -1357,7 +1971,7 @@
       const lit = history.filter(h => normalizeCategory(h.category) === 'litigation').length;
       const conv = history.filter(h => normalizeCategory(h.category) === 'conveyancing').length;
       const prob = history.filter(h => normalizeCategory(h.category) === 'probate').length;
-      const text = `Am2Pm Progress Summary:\n- Total Stages & Tasks Cleared: ${total}\n- Litigation: ${lit}\n- Conveyancing: ${conv}\n- Probate: ${prob}`;
+      const text = `Am2Pm Progress Summary:\n- Total Stages & Tasks Cleared: ${total}\n- Saved Wins: ${wins.length}\n- Litigation: ${lit}\n- Conveyancing: ${conv}\n- Probate: ${prob}`;
       navigator.clipboard.writeText(text);
       alert('Progress summary copied to clipboard.');
     }
@@ -1374,11 +1988,17 @@
       renderHome();
       renderShifts();
       renderAnalytics();
+      renderWins();
     }
 
     document.getElementById('taskInput').addEventListener('keypress', e => {
       if (e.key === 'Enter') addTask();
     });
+
+    if (!workSchedule) {
+      updateSetupPreview();
+      document.getElementById('onboardingModal').classList.add('open');
+    }
 
     renderAll();
   </script>
