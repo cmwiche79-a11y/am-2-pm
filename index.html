@@ -352,6 +352,7 @@
     .bg-conveyancing { background: #f3e8ff; color: #7e22ce; }
     .bg-probate { background: #e0f2fe; color: #0369a1; }
     .bg-corporate { background: #dcfce7; color: #15803d; }
+    .bg-general { background: #f1f5f9; color: #334155; }
 
     .task-body { flex: 1; min-width: 0; cursor: pointer; }
     .task-title {
@@ -571,13 +572,13 @@
       box-shadow: var(--shadow);
     }
     .segmented.three { grid-template-columns: repeat(3, 1fr); }
-    .segmented.five { grid-template-columns: repeat(5, 1fr); }
+    .segmented.six { grid-template-columns: repeat(6, 1fr); }
     .seg-btn {
       border: none;
       background: transparent;
-      padding: 9px 4px;
+      padding: 9px 2px;
       border-radius: 10px;
-      font-size: 0.76rem;
+      font-size: 0.72rem;
       font-weight: 600;
       color: var(--muted);
       cursor: pointer;
@@ -855,7 +856,7 @@
         <div class="onboarding-badge">Workspace Setup</div>
         <div class="onboarding-title">Set Your Working Hours</div>
         <div class="onboarding-sub">
-          AM Shift covers your workday hours; PM Shift covers after-hours work (past clock-off) and career-related work. You can edit this anytime in Profile.
+          AM Shift covers your workday hours; PM Shift covers after-hours work (anything past clock-off) and career-related work. You can edit this anytime in Profile.
         </div>
 
         <div class="time-grid">
@@ -871,7 +872,7 @@
 
         <div class="schedule-note" id="setupPreviewText">
           AM Shift: 08:00 – 17:00 (Workday matters)<br>
-          PM Shift: After 17:00 &amp; career / growth work
+          PM Shift: After 17:00 &amp; career / personal work
         </div>
 
         <button class="save-task-btn" style="margin-top: 4px;" onclick="saveScheduleSetup()">Confirm Schedule</button>
@@ -923,13 +924,14 @@
         </button>
       </div>
 
-      <!-- Practice Lane Filter Bar (includes Corporate Advisory & Compliance) -->
-      <div class="segmented five" style="margin-bottom: 16px;">
+      <!-- Category Filter Bar -->
+      <div class="segmented six" style="margin-bottom: 16px;">
         <button type="button" class="seg-btn active" id="home-filter-all" onclick="toggleHomeFilter('all')">All</button>
         <button type="button" class="seg-btn" id="home-filter-litigation" onclick="toggleHomeFilter('litigation')">LIT</button>
         <button type="button" class="seg-btn" id="home-filter-conveyancing" onclick="toggleHomeFilter('conveyancing')">CON</button>
         <button type="button" class="seg-btn" id="home-filter-probate" onclick="toggleHomeFilter('probate')">PRB</button>
         <button type="button" class="seg-btn" id="home-filter-corporate" onclick="toggleHomeFilter('corporate')">COR</button>
+        <button type="button" class="seg-btn" id="home-filter-general" onclick="toggleHomeFilter('general')">GEN</button>
       </div>
 
       <div class="sec-head">
@@ -971,7 +973,7 @@
       </div>
 
       <div class="sec-head">
-        <span class="sec-title">Practice Area Breakdown</span>
+        <span class="sec-title">Category Breakdown</span>
       </div>
       <div class="white-card" id="practiceBreakdown"></div>
 
@@ -991,12 +993,13 @@
         </div>
       </div>
 
-      <div class="segmented five">
+      <div class="segmented six">
         <button class="seg-btn active" id="win-filter-all" onclick="setWinFilter('all')">All</button>
         <button class="seg-btn" id="win-filter-litigation" onclick="setWinFilter('litigation')">LIT</button>
         <button class="seg-btn" id="win-filter-conveyancing" onclick="setWinFilter('conveyancing')">CON</button>
         <button class="seg-btn" id="win-filter-probate" onclick="setWinFilter('probate')">PRB</button>
         <button class="seg-btn" id="win-filter-corporate" onclick="setWinFilter('corporate')">COR</button>
+        <button class="seg-btn" id="win-filter-general" onclick="setWinFilter('general')">GEN</button>
       </div>
 
       <div id="winsList"></div>
@@ -1015,7 +1018,7 @@
         <div class="breakdown-row">
           <div>
             <div class="breakdown-name">Working Hours</div>
-            <div class="breakdown-sub" id="profScheduleSub">08:00 – 17:00 (PM: 17:00+ &amp; career work)</div>
+            <div class="breakdown-sub" id="profScheduleSub">08:00 – 17:00 (PM: 17:00+ &amp; career/personal)</div>
           </div>
           <button class="sec-action" onclick="openScheduleEditor()">Edit</button>
         </div>
@@ -1074,14 +1077,15 @@
       <div class="sheet">
         <div class="sheet-handle"></div>
         <div class="sheet-title">New Matter or Task</div>
-        <input id="taskInput" type="text" placeholder="e.g., Stand 4122 Transfer, PACRA Annual Return, CV / Study..." oninput="recomputeAutoShift()" />
+        <input id="taskInput" type="text" placeholder="e.g., Stand 4122 Transfer, Gym, Study, Errand..." oninput="recomputeAutoShift()" />
 
-        <div class="chip-label">Practice Lane</div>
+        <div class="chip-label">Category (Optional for PM / After-Hours)</div>
         <div class="chip-row" id="catChips">
-          <button type="button" class="choice-chip selected" data-val="litigation" onclick="pickChip('catChips', this)">Litigation</button>
-          <button type="button" class="choice-chip" data-val="conveyancing" onclick="pickChip('catChips', this)">Conveyancing</button>
-          <button type="button" class="choice-chip" data-val="probate" onclick="pickChip('catChips', this)">Probate</button>
-          <button type="button" class="choice-chip" data-val="corporate" onclick="pickChip('catChips', this)">Corporate Advisory &amp; Compliance</button>
+          <button type="button" class="choice-chip selected" data-val="litigation" onclick="manualPickCategory(this)">Litigation</button>
+          <button type="button" class="choice-chip" data-val="conveyancing" onclick="manualPickCategory(this)">Conveyancing</button>
+          <button type="button" class="choice-chip" data-val="probate" onclick="manualPickCategory(this)">Probate</button>
+          <button type="button" class="choice-chip" data-val="corporate" onclick="manualPickCategory(this)">Corporate Advisory &amp; Compliance</button>
+          <button type="button" class="choice-chip" data-val="general" onclick="manualPickCategory(this)">General / Personal</button>
         </div>
 
         <div class="chip-label">Hurdle / Stage Tracking</div>
@@ -1120,12 +1124,13 @@
         <div class="chip-label">Achievement / Matter Title</div>
         <input id="winTitleInput" type="text" placeholder="e.g., Cleared contested query and lodged transfer" />
 
-        <div class="chip-label">Practice Lane</div>
+        <div class="chip-label">Category</div>
         <div class="chip-row" id="winCatChips">
           <button type="button" class="choice-chip selected" data-val="litigation" onclick="pickChip('winCatChips', this)">Litigation</button>
           <button type="button" class="choice-chip" data-val="conveyancing" onclick="pickChip('winCatChips', this)">Conveyancing</button>
           <button type="button" class="choice-chip" data-val="probate" onclick="pickChip('winCatChips', this)">Probate</button>
           <button type="button" class="choice-chip" data-val="corporate" onclick="pickChip('winCatChips', this)">Corporate Advisory &amp; Compliance</button>
+          <button type="button" class="choice-chip" data-val="general" onclick="pickChip('winCatChips', this)">General / Personal</button>
         </div>
 
         <div class="chip-label">Date (When did it happen?)</div>
@@ -1163,12 +1168,14 @@
     let pendingWinSourceTaskId = null;
     let editingWinId = null;
     let userOverrodeShift = false;
+    let userOverrodeCategory = false;
 
     const CATEGORIES = {
       litigation: { name: 'Litigation', code: 'LIT', bg: 'bg-litigation' },
       conveyancing: { name: 'Conveyancing', code: 'CON', bg: 'bg-conveyancing' },
       probate: { name: 'Probate', code: 'PRB', bg: 'bg-probate' },
-      corporate: { name: 'Corporate Advisory & Compliance', code: 'COR', bg: 'bg-corporate' }
+      corporate: { name: 'Corporate Advisory & Compliance', code: 'COR', bg: 'bg-corporate' },
+      general: { name: 'General / Personal', code: 'GEN', bg: 'bg-general' }
     };
 
     const MILESTONES = [
@@ -1199,7 +1206,7 @@
       const end = document.getElementById('setupEndTime').value || '17:00';
       document.getElementById('setupPreviewText').innerHTML =
         `AM Shift: <strong>${start} – ${end}</strong> (Workday matters)<br>` +
-        `PM Shift: <strong>After ${end}</strong> &amp; career / growth work`;
+        `PM Shift: <strong>After ${end}</strong> &amp; career / personal work`;
     }
 
     function saveScheduleSetup() {
@@ -1245,7 +1252,7 @@
       if (isAfterHours) {
         return {
           shift: 'PM',
-          reason: `PM Shift — after-hours work (outside ${sched.start} – ${sched.end})`
+          reason: `PM Shift — after-hours task (outside ${sched.start} – ${sched.end})`
         };
       }
       return {
@@ -1254,12 +1261,18 @@
       };
     }
 
+    function syncDefaultCategoryForShift(shift) {
+      if (userOverrodeCategory) return;
+      setChipGroupValue('catChips', shift === 'PM' ? 'general' : 'litigation');
+    }
+
     function recomputeAutoShift() {
       if (userOverrodeShift) return;
       const title = document.getElementById('taskInput').value;
       const decision = determineAutoShift(title);
       setChipGroupValue('shiftChips', decision.shift);
       document.getElementById('shiftAutoReason').textContent = decision.reason;
+      syncDefaultCategoryForShift(decision.shift);
     }
 
     function pickTaskRuleChip(groupId, btn) {
@@ -1267,15 +1280,21 @@
       recomputeAutoShift();
     }
 
+    function manualPickCategory(btn) {
+      userOverrodeCategory = true;
+      pickChip('catChips', btn);
+    }
+
     function manualPickShift(btn) {
       userOverrodeShift = true;
       pickChip('shiftChips', btn);
       const val = btn.getAttribute('data-val');
       document.getElementById('shiftAutoReason').textContent = `Manually assigned to ${val} Shift`;
+      syncDefaultCategoryForShift(val);
     }
 
     function normalizeCategory(cat) {
-      return CATEGORIES[cat] ? cat : 'litigation';
+      return CATEGORIES[cat] ? cat : 'general';
     }
 
     function todayISO() {
@@ -1303,6 +1322,7 @@
 
     function openSheet() {
       userOverrodeShift = false;
+      userOverrodeCategory = false;
       recomputeAutoShift();
       document.getElementById('sheetBackdrop').classList.add('open');
       setTimeout(() => document.getElementById('taskInput').focus(), 100);
@@ -1436,7 +1456,7 @@
 
     function setWinFilter(cat) {
       winCatFilter = cat;
-      ['all', 'litigation', 'conveyancing', 'probate', 'corporate'].forEach(k => {
+      ['all', 'litigation', 'conveyancing', 'probate', 'corporate', 'general'].forEach(k => {
         document.getElementById(`win-filter-${k}`).classList.toggle('active', winCatFilter === k);
       });
       renderWins();
@@ -1481,7 +1501,9 @@
     function addTask() {
       const input = document.getElementById('taskInput');
       if (!input.value.trim()) return;
-      const cat = normalizeCategory(getChipVal('catChips'));
+      const shift = getChipVal('shiftChips') || 'AM';
+      const rawCat = getChipVal('catChips');
+      const cat = rawCat ? normalizeCategory(rawCat) : (shift === 'PM' ? 'general' : 'litigation');
       const tracksHurdles = getChipVal('modeChips') === 'hurdles';
 
       const newId = Date.now();
@@ -1489,7 +1511,7 @@
         id: newId,
         title: input.value.trim(),
         category: cat,
-        shift: getChipVal('shiftChips') || 'AM',
+        shift,
         priority: Number(getChipVal('prioChips') || 2),
         power: getChipVal('powerChips') || 'Needs Power/Data',
         tracksHurdles,
@@ -1632,7 +1654,7 @@
       ['litigation', 'conveyancing', 'probate'].forEach(k => {
         document.getElementById(`q-${k}`).classList.toggle('active-filter', homeCatFilter === k);
       });
-      ['all', 'litigation', 'conveyancing', 'probate', 'corporate'].forEach(k => {
+      ['all', 'litigation', 'conveyancing', 'probate', 'corporate', 'general'].forEach(k => {
         const btn = document.getElementById(`home-filter-${k}`);
         if (btn) btn.classList.toggle('active', homeCatFilter === k);
       });
@@ -1776,7 +1798,7 @@
       if (blackoutMode) {
         titleEl.textContent = 'Offline / Low-Battery Matters';
       } else if (homeCatFilter !== 'all') {
-        titleEl.textContent = `${CATEGORIES[homeCatFilter].name} Matters`;
+        titleEl.textContent = `${CATEGORIES[homeCatFilter].name} Tasks`;
       } else {
         titleEl.textContent = 'Active Matters & Tasks';
       }
@@ -1785,7 +1807,7 @@
       listEl.innerHTML = '';
       const sorted = sortList(filtered);
       if (sorted.length === 0) {
-        listEl.innerHTML = `<div class="empty-box">No items match this view. Tap <strong>+ Add Task</strong> above to log a matter.</div>`;
+        listEl.innerHTML = `<div class="empty-box">No items match this view. Tap <strong>+ Add Task</strong> above to log a task.</div>`;
         return;
       }
       sorted.forEach(t => listEl.appendChild(buildTaskCard(t)));
@@ -1796,13 +1818,13 @@
       document.getElementById('shiftHeading').textContent =
         currentShiftTab === 'AM'
           ? `AM Shift (${sched.start} – ${sched.end}) — Workday Matters`
-          : `PM Shift (After ${sched.end} & Career Work)`;
+          : `PM Shift (After ${sched.end} & Career / Personal)`;
 
       const listEl = document.getElementById('shiftTaskList');
       listEl.innerHTML = '';
       const filtered = sortList(tasks.filter(t => t.shift === currentShiftTab));
       if (filtered.length === 0) {
-        listEl.innerHTML = `<div class="empty-box">No ${currentShiftTab} Shift matters queued yet.</div>`;
+        listEl.innerHTML = `<div class="empty-box">No ${currentShiftTab} Shift items queued yet.</div>`;
         return;
       }
       filtered.forEach(t => listEl.appendChild(buildTaskCard(t)));
@@ -1859,7 +1881,7 @@
         `;
       }).join('');
 
-      const counts = { litigation: 0, conveyancing: 0, probate: 0, corporate: 0 };
+      const counts = { litigation: 0, conveyancing: 0, probate: 0, corporate: 0, general: 0 };
       scoped.forEach(e => counts[normalizeCategory(e.category)]++);
       const totalScoped = scoped.length || 1;
 
@@ -1917,7 +1939,7 @@
       `;
 
       const sched = getActiveSchedule();
-      document.getElementById('profScheduleSub').textContent = `${sched.start} – ${sched.end} (PM: ${sched.end}+ & career work)`;
+      document.getElementById('profScheduleSub').textContent = `${sched.start} – ${sched.end} (PM: ${sched.end}+ & career/personal)`;
       document.getElementById('profileRankBadge').textContent = currentBadge;
       document.getElementById('profTotal').textContent = totalAll;
       document.getElementById('profWins').textContent = wins.length;
@@ -1969,7 +1991,8 @@
       const conv = history.filter(h => normalizeCategory(h.category) === 'conveyancing').length;
       const prob = history.filter(h => normalizeCategory(h.category) === 'probate').length;
       const corp = history.filter(h => normalizeCategory(h.category) === 'corporate').length;
-      const text = `Am2Pm Progress Summary:\n- Total Stages & Tasks Cleared: ${total}\n- Saved Wins: ${wins.length}\n- Litigation: ${lit}\n- Conveyancing: ${conv}\n- Probate: ${prob}\n- Corporate Advisory & Compliance: ${corp}`;
+      const gen = history.filter(h => normalizeCategory(h.category) === 'general').length;
+      const text = `Am2Pm Progress Summary:\n- Total Stages & Tasks Cleared: ${total}\n- Saved Wins: ${wins.length}\n- Litigation: ${lit}\n- Conveyancing: ${conv}\n- Probate: ${prob}\n- Corporate Advisory & Compliance: ${corp}\n- General / Personal: ${gen}`;
       navigator.clipboard.writeText(text);
       alert('Progress summary copied to clipboard.');
     }
