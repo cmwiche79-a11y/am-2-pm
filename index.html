@@ -1,3 +1,16 @@
+**Corporate Advisory & Compliance** (`COR`) has been added directly on top of your live code, keeping all your `localStorage` keys (`am2pm_tasks`, `am2pm_history`, `am2pm_wins`, `am2pm_schedule`) completely intact so none of your existing matters, hurdles, wins, or work hours are reset.
+
+### What Changed
+
+* **Badge & Config:** Added `corporate` (`Corporate Advisory & Compliance`, code `COR`) with an emerald badge (`#dcfce7` / `#15803d`) in `CATEGORIES`.
+* **Today Quick Grid & Wins Filters:** Updated the quick-action row (`+`, `LIT`, `CON`, `PRB`, `COR`) and the Wins Folder filter bar (`All`, `LIT`, `CON`, `PRB`, `COR`) so you can filter Corporate Advisory & Compliance items in one tap.
+* **Task & Win Creation Sheets + Analytics:** Added the **Corporate Advisory & Compliance** option chip to both the **New Matter or Task** sheet and the **Save to Wins Folder** sheet, and included `corporate` in the **Track Record** breakdown and `copyReport()` summary.
+
+---
+
+### Updated `index.html`
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -233,11 +246,11 @@
       transition: width 0.3s ease;
     }
 
-    /* 4 Quick Action Tiles */
+    /* 5 Quick Action Tiles */
     .quick-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
       margin-bottom: 22px;
     }
     .quick-btn {
@@ -252,15 +265,15 @@
       color: var(--text);
     }
     .quick-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
       background: var(--white);
       border: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
+      font-size: 0.76rem;
       font-weight: 800;
       letter-spacing: 0.03em;
       color: var(--text);
@@ -271,7 +284,7 @@
       background: var(--royal-soft);
       border-color: var(--royal-border);
       color: var(--royal);
-      font-size: 1.35rem;
+      font-size: 1.3rem;
     }
     .quick-btn.active-filter .quick-icon {
       background: var(--royal);
@@ -279,9 +292,10 @@
       border-color: var(--royal);
     }
     .quick-label {
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 600;
       color: var(--muted);
+      text-align: center;
     }
     .quick-btn.active-filter .quick-label { color: var(--royal); }
 
@@ -351,6 +365,7 @@
     .bg-litigation { background: #ffe4e6; color: #be123c; }
     .bg-conveyancing { background: #f3e8ff; color: #7e22ce; }
     .bg-probate { background: #e0f2fe; color: #0369a1; }
+    .bg-corporate { background: #dcfce7; color: #15803d; }
 
     .task-body { flex: 1; min-width: 0; cursor: pointer; }
     .task-title {
@@ -571,12 +586,13 @@
     }
     .segmented.three { grid-template-columns: repeat(3, 1fr); }
     .segmented.four { grid-template-columns: repeat(4, 1fr); }
+    .segmented.five { grid-template-columns: repeat(5, 1fr); }
     .seg-btn {
       border: none;
       background: transparent;
-      padding: 9px 6px;
+      padding: 9px 4px;
       border-radius: 10px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: var(--muted);
       cursor: pointer;
@@ -902,7 +918,7 @@
         </div>
       </div>
 
-      <!-- 4 Quick Action Tiles -->
+      <!-- 5 Quick Action Tiles -->
       <div class="quick-grid">
         <button class="quick-btn primary" onclick="openSheet()">
           <div class="quick-icon">+</div>
@@ -919,6 +935,10 @@
         <button class="quick-btn" id="q-probate" onclick="toggleHomeFilter('probate')">
           <div class="quick-icon">PRB</div>
           <span class="quick-label">Probate</span>
+        </button>
+        <button class="quick-btn" id="q-corporate" onclick="toggleHomeFilter('corporate')">
+          <div class="quick-icon">COR</div>
+          <span class="quick-label">Corporate</span>
         </button>
       </div>
 
@@ -981,11 +1001,12 @@
         </div>
       </div>
 
-      <div class="segmented four">
+      <div class="segmented five">
         <button class="seg-btn active" id="win-filter-all" onclick="setWinFilter('all')">All</button>
         <button class="seg-btn" id="win-filter-litigation" onclick="setWinFilter('litigation')">LIT</button>
         <button class="seg-btn" id="win-filter-conveyancing" onclick="setWinFilter('conveyancing')">CON</button>
         <button class="seg-btn" id="win-filter-probate" onclick="setWinFilter('probate')">PRB</button>
+        <button class="seg-btn" id="win-filter-corporate" onclick="setWinFilter('corporate')">COR</button>
       </div>
 
       <div id="winsList"></div>
@@ -1063,13 +1084,14 @@
       <div class="sheet">
         <div class="sheet-handle"></div>
         <div class="sheet-title">New Matter or Task</div>
-        <input id="taskInput" type="text" placeholder="e.g., Stand 4122 Transfer, Court Mention, Draft Affidavit..." oninput="recomputeAutoShift()" />
+        <input id="taskInput" type="text" placeholder="e.g., Stand 4122 Transfer, PACRA Annual Return, Draft Affidavit..." oninput="recomputeAutoShift()" />
 
         <div class="chip-label">Practice Lane</div>
         <div class="chip-row" id="catChips">
           <button type="button" class="choice-chip selected" data-val="litigation" onclick="pickChip('catChips', this)">Litigation</button>
           <button type="button" class="choice-chip" data-val="conveyancing" onclick="pickChip('catChips', this)">Conveyancing</button>
           <button type="button" class="choice-chip" data-val="probate" onclick="pickChip('catChips', this)">Probate</button>
+          <button type="button" class="choice-chip" data-val="corporate" onclick="pickChip('catChips', this)">Corporate Advisory &amp; Compliance</button>
         </div>
 
         <div class="chip-label">Hurdle / Stage Tracking</div>
@@ -1078,7 +1100,7 @@
           <button type="button" class="choice-chip" data-val="single" onclick="pickChip('modeChips', this)">Single Task</button>
         </div>
 
-        <div class="chip-label">Priority & Connectivity</div>
+        <div class="chip-label">Priority &amp; Connectivity</div>
         <div class="chip-row" id="prioChips">
           <button type="button" class="choice-chip" data-val="1" onclick="pickTaskRuleChip('prioChips', this)">High Priority</button>
           <button type="button" class="choice-chip selected" data-val="2" onclick="pickTaskRuleChip('prioChips', this)">Normal</button>
@@ -1113,6 +1135,7 @@
           <button type="button" class="choice-chip selected" data-val="litigation" onclick="pickChip('winCatChips', this)">Litigation</button>
           <button type="button" class="choice-chip" data-val="conveyancing" onclick="pickChip('winCatChips', this)">Conveyancing</button>
           <button type="button" class="choice-chip" data-val="probate" onclick="pickChip('winCatChips', this)">Probate</button>
+          <button type="button" class="choice-chip" data-val="corporate" onclick="pickChip('winCatChips', this)">Corporate Advisory &amp; Compliance</button>
         </div>
 
         <div class="chip-label">Date (When did it happen?)</div>
@@ -1154,7 +1177,8 @@
     const CATEGORIES = {
       litigation: { name: 'Litigation', code: 'LIT', bg: 'bg-litigation' },
       conveyancing: { name: 'Conveyancing', code: 'CON', bg: 'bg-conveyancing' },
-      probate: { name: 'Probate', code: 'PRB', bg: 'bg-probate' }
+      probate: { name: 'Probate', code: 'PRB', bg: 'bg-probate' },
+      corporate: { name: 'Corporate Advisory & Compliance', code: 'COR', bg: 'bg-corporate' }
     };
 
     const MILESTONES = [
@@ -1233,7 +1257,7 @@
 
       const isOffline = (power || '').toLowerCase().includes('offline');
       const isUrgent = Number(priority) === 1;
-      const externalKeywords = /\b(court|hearing|mention|registry|lodge|lodgement|file|filing|zra|consent|serve|service|search|stamp|bank|client)\b/i;
+      const externalKeywords = /\b(court|hearing|mention|registry|lodge|lodgement|file|filing|zra|pacra|consent|serve|service|search|stamp|bank|client)\b/i;
       const isExternal = externalKeywords.test(title || '');
 
       if (nowMins >= endMins) {
@@ -1452,7 +1476,7 @@
 
     function setWinFilter(cat) {
       winCatFilter = cat;
-      ['all', 'litigation', 'conveyancing', 'probate'].forEach(k => {
+      ['all', 'litigation', 'conveyancing', 'probate', 'corporate'].forEach(k => {
         document.getElementById(`win-filter-${k}`).classList.toggle('active', winCatFilter === k);
       });
       renderWins();
@@ -1646,7 +1670,7 @@
 
     function toggleHomeFilter(cat) {
       homeCatFilter = homeCatFilter === cat ? 'all' : cat;
-      ['litigation', 'conveyancing', 'probate'].forEach(k => {
+      ['litigation', 'conveyancing', 'probate', 'corporate'].forEach(k => {
         document.getElementById(`q-${k}`).classList.toggle('active-filter', homeCatFilter === k);
       });
       renderHome();
@@ -1862,7 +1886,7 @@
         `;
       }).join('');
 
-      const counts = { litigation: 0, conveyancing: 0, probate: 0 };
+      const counts = { litigation: 0, conveyancing: 0, probate: 0, corporate: 0 };
       scoped.forEach(e => counts[normalizeCategory(e.category)]++);
       const totalScoped = scoped.length || 1;
 
@@ -1971,7 +1995,8 @@
       const lit = history.filter(h => normalizeCategory(h.category) === 'litigation').length;
       const conv = history.filter(h => normalizeCategory(h.category) === 'conveyancing').length;
       const prob = history.filter(h => normalizeCategory(h.category) === 'probate').length;
-      const text = `Am2Pm Progress Summary:\n- Total Stages & Tasks Cleared: ${total}\n- Saved Wins: ${wins.length}\n- Litigation: ${lit}\n- Conveyancing: ${conv}\n- Probate: ${prob}`;
+      const corp = history.filter(h => normalizeCategory(h.category) === 'corporate').length;
+      const text = `Am2Pm Progress Summary:\n- Total Stages & Tasks Cleared: ${total}\n- Saved Wins: ${wins.length}\n- Litigation: ${lit}\n- Conveyancing: ${conv}\n- Probate: ${prob}\n- Corporate Advisory & Compliance: ${corp}`;
       navigator.clipboard.writeText(text);
       alert('Progress summary copied to clipboard.');
     }
@@ -2004,3 +2029,5 @@
   </script>
 </body>
 </html>
+
+```
