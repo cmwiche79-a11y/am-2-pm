@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Am2Pm — Daily Focus, Matter Stages & Wins Folder</title>
+  <title>Am2Pm — Daily Focus, Matter Register & Wins Folder</title>
   <style>
     :root {
       --bg: #f4f7fc;
@@ -16,6 +16,10 @@
       --muted: #64748b;
       --border: #e2e8f0;
       --green: #10b981;
+      --amber: #d97706;
+      --amber-soft: #fef3c7;
+      --red: #dc2626;
+      --red-soft: #fef2f2;
       --shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
     }
 
@@ -175,7 +179,7 @@
       border-radius: 20px;
       padding: 20px;
       box-shadow: 0 12px 24px rgba(29, 78, 216, 0.24);
-      margin-bottom: 18px;
+      margin-bottom: 14px;
       position: relative;
       overflow: hidden;
     }
@@ -231,6 +235,39 @@
       width: 0%;
       border-radius: 999px;
       transition: width 0.3s ease;
+    }
+
+    /* Bring-Up Alert Banner on Home */
+    .bringup-banner {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: var(--white);
+      border: 1px solid #fde68a;
+      border-left: 4px solid var(--amber);
+      border-radius: 14px;
+      padding: 11px 14px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+    }
+    .bringup-banner.show { display: flex; }
+    .bringup-banner-text {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .bringup-banner-sub {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .bringup-banner-cta {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--amber);
+      white-space: nowrap;
     }
 
     /* 4 Quick Action Tiles */
@@ -392,6 +429,16 @@
       font-weight: 700;
       font-size: 0.68rem;
     }
+    .due-tag {
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.68rem;
+    }
+    .due-overdue { background: var(--red-soft); color: var(--red); border: 1px solid #fecaca; }
+    .due-today { background: var(--amber-soft); color: var(--amber); border: 1px solid #fde68a; }
+    .due-upcoming { background: var(--royal-soft); color: var(--royal); border: 1px solid var(--royal-border); }
+
     .task-actions {
       display: flex;
       align-items: center;
@@ -495,7 +542,7 @@
       transition: width 0.25s ease;
     }
 
-    /* Expandable Requirements Checklist */
+    /* Expandable Requirements & Matter Log Drawers */
     .stage-drawer {
       margin-top: 10px;
       background: var(--bg);
@@ -548,6 +595,7 @@
       border: 1px solid var(--border);
       font-size: 0.76rem;
       outline: none;
+      background: var(--white);
     }
     .add-req-row button {
       padding: 7px 10px;
@@ -558,6 +606,58 @@
       font-size: 0.74rem;
       font-weight: 700;
       cursor: pointer;
+    }
+
+    /* Matter File Chronology Styling */
+    .matter-log-item {
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.78rem;
+      line-height: 1.4;
+    }
+    .matter-log-item:last-of-type { border-bottom: none; }
+    .matter-log-date {
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: var(--royal);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .matter-update-box {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .matter-update-box input {
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.76rem;
+      background: var(--white);
+      outline: none;
+    }
+    .matter-update-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .matter-update-row input[type="date"] {
+      flex: 1;
+    }
+    .matter-update-row button {
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: none;
+      background: var(--royal);
+      color: var(--white);
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
     }
 
     /* Segmented Control */
@@ -572,6 +672,7 @@
       box-shadow: var(--shadow);
     }
     .segmented.three { grid-template-columns: repeat(3, 1fr); }
+    .segmented.four { grid-template-columns: repeat(4, 1fr); }
     .segmented.six { grid-template-columns: repeat(6, 1fr); }
     .seg-btn {
       border: none;
@@ -707,7 +808,7 @@
       border-top: 1px solid var(--bg);
     }
 
-    /* Bottom Navigation Bar */
+    /* Bottom Navigation Bar (6 tabs) */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -718,8 +819,8 @@
       background: var(--white);
       border-top: 1px solid var(--border);
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      padding: 10px 4px 14px;
+      grid-template-columns: repeat(6, 1fr);
+      padding: 10px 2px 14px;
       z-index: 40;
     }
     .nav-btn {
@@ -730,10 +831,10 @@
       align-items: center;
       justify-content: center;
       color: var(--muted);
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 700;
       cursor: pointer;
-      padding: 4px 2px;
+      padding: 4px 1px;
     }
     .nav-btn.active { color: var(--royal); }
 
@@ -904,6 +1005,15 @@
         </div>
       </div>
 
+      <!-- Bring-Up Alert Banner -->
+      <div class="bringup-banner" id="homeBringUpBanner" onclick="openDueMatters()">
+        <div>
+          <div class="bringup-banner-text" id="bringupBannerTitle">0 Files Due for Follow-Up</div>
+          <div class="bringup-banner-sub" id="bringupBannerSub">Tap to review your Matter &amp; Bring-Up Register</div>
+        </div>
+        <div class="bringup-banner-cta">Review &rarr;</div>
+      </div>
+
       <!-- 4 Quick Action Tiles -->
       <div class="quick-grid">
         <button class="quick-btn primary" onclick="openSheet()">
@@ -957,7 +1067,24 @@
       <div id="shiftTaskList" class="task-list"></div>
     </div>
 
-    <!-- VIEW 3: ANALYTICS & TRACK RECORD -->
+    <!-- VIEW 3: MATTERS & BRING-UP REGISTER -->
+    <div id="view-matters" class="view">
+      <div class="sec-head">
+        <span class="sec-title">Matter &amp; Bring-Up Register</span>
+        <button class="sec-action" onclick="openMatterSheet()">+ Log File</button>
+      </div>
+
+      <div class="segmented four">
+        <button class="seg-btn active" id="matter-filter-due" onclick="setMatterFilter('due')">Due / Overdue</button>
+        <button class="seg-btn" id="matter-filter-active" onclick="setMatterFilter('active')">Active Files</button>
+        <button class="seg-btn" id="matter-filter-closed" onclick="setMatterFilter('closed')">Closed</button>
+        <button class="seg-btn" id="matter-filter-all" onclick="setMatterFilter('all')">All</button>
+      </div>
+
+      <div id="mattersList" class="task-list"></div>
+    </div>
+
+    <!-- VIEW 4: ANALYTICS & TRACK RECORD -->
     <div id="view-analytics" class="view">
       <div class="segmented three">
         <button class="seg-btn active" id="range-week" onclick="setAnalyticsRange('week')">Week</button>
@@ -983,7 +1110,7 @@
       <div class="white-card" id="milestoneCard"></div>
     </div>
 
-    <!-- VIEW 4: WINS FOLDER -->
+    <!-- VIEW 5: WINS FOLDER -->
     <div id="view-wins" class="view">
       <div class="sec-head">
         <span class="sec-title">Wins Folder</span>
@@ -1005,7 +1132,7 @@
       <div id="winsList"></div>
     </div>
 
-    <!-- VIEW 5: PROFILE & SETTINGS -->
+    <!-- VIEW 6: PROFILE & SETTINGS -->
     <div id="view-profile" class="view">
       <div class="white-card" style="text-align: center; padding: 24px 18px;">
         <div style="width: 60px; height: 60px; border-radius: 50%; background: var(--royal-soft); color: var(--royal); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; margin: 0 auto 10px;">A2P</div>
@@ -1021,6 +1148,13 @@
             <div class="breakdown-sub" id="profScheduleSub">08:00 – 17:00 (PM: 17:00+ &amp; career/personal)</div>
           </div>
           <button class="sec-action" onclick="openScheduleEditor()">Edit</button>
+        </div>
+        <div class="breakdown-row">
+          <div>
+            <div class="breakdown-name">Active Files in Register</div>
+            <div class="breakdown-sub">Ongoing matters tracked across days</div>
+          </div>
+          <div class="breakdown-pct" id="profActiveMatters">0</div>
         </div>
         <div class="breakdown-row">
           <div>
@@ -1053,7 +1187,7 @@
       </div>
     </div>
 
-    <!-- 5-Tab Bottom Navigation -->
+    <!-- 6-Tab Bottom Navigation -->
     <nav class="bottom-nav">
       <button class="nav-btn active" id="nav-today" onclick="switchView('today')">
         <span>Today</span>
@@ -1061,8 +1195,11 @@
       <button class="nav-btn" id="nav-shifts" onclick="switchView('shifts')">
         <span>Shifts</span>
       </button>
+      <button class="nav-btn" id="nav-matters" onclick="switchView('matters')">
+        <span>Files</span>
+      </button>
       <button class="nav-btn" id="nav-analytics" onclick="switchView('analytics')">
-        <span>Track Record</span>
+        <span>Record</span>
       </button>
       <button class="nav-btn" id="nav-wins" onclick="switchView('wins')">
         <span>Wins</span>
@@ -1076,8 +1213,8 @@
     <div class="sheet-backdrop" id="sheetBackdrop" onclick="closeSheetOnBg(event)">
       <div class="sheet">
         <div class="sheet-handle"></div>
-        <div class="sheet-title">New Matter or Task</div>
-        <input id="taskInput" type="text" placeholder="e.g., Stand 4122 Transfer, Gym, Study, Errand..." oninput="recomputeAutoShift()" />
+        <div class="sheet-title">New Task or Action</div>
+        <input id="taskInput" type="text" placeholder="e.g., Draft Affidavit, Registry Filing, Gym, Study..." oninput="recomputeAutoShift()" />
 
         <div class="chip-label">Category (Optional for PM / After-Hours)</div>
         <div class="chip-row" id="catChips">
@@ -1112,6 +1249,39 @@
         <div class="auto-hint" id="shiftAutoReason">Auto-routed based on your 08:00 – 17:00 schedule</div>
 
         <button class="save-task-btn" onclick="addTask()">Save to Schedule</button>
+      </div>
+    </div>
+
+    <!-- Slide-Up Log New Matter / File Bottom Sheet -->
+    <div class="sheet-backdrop" id="matterSheetBackdrop" onclick="closeMatterSheetOnBg(event)">
+      <div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title">Log File on First Contact</div>
+
+        <div class="chip-label">Matter / Parties Name</div>
+        <input id="matterTitleInput" type="text" placeholder="e.g., Banda v. Mulenga / Stand 4122 Transfer" />
+
+        <div class="chip-label">Cause No. / File Reference (Optional)</div>
+        <input id="matterRefInput" type="text" placeholder="e.g., 2026/HP/0418 or CF/LIT/102" />
+
+        <div class="chip-label">Practice Lane</div>
+        <div class="chip-row" id="matterCatChips">
+          <button type="button" class="choice-chip selected" data-val="litigation" onclick="pickChip('matterCatChips', this)">Litigation</button>
+          <button type="button" class="choice-chip" data-val="conveyancing" onclick="pickChip('matterCatChips', this)">Conveyancing</button>
+          <button type="button" class="choice-chip" data-val="probate" onclick="pickChip('matterCatChips', this)">Probate</button>
+          <button type="button" class="choice-chip" data-val="corporate" onclick="pickChip('matterCatChips', this)">Corporate Advisory &amp; Compliance</button>
+        </div>
+
+        <div class="chip-label">Next Expected Step / Follow-Up Action</div>
+        <input id="matterNextStepInput" type="text" placeholder="e.g., Check if Affidavit of Service is filed at Registry" />
+
+        <div class="chip-label">Bring-Up / Follow-Up Date</div>
+        <input id="matterFollowUpInput" type="date" />
+
+        <div class="chip-label">First-Contact Note (What did the principal instruct?)</div>
+        <textarea id="matterInitNoteInput" placeholder="Initial instructions, return date, or current file position..."></textarea>
+
+        <button class="save-task-btn" onclick="saveNewMatter()">Register File</button>
       </div>
     </div>
 
@@ -1157,11 +1327,14 @@
     let tasks = JSON.parse(localStorage.getItem('am2pm_tasks')) || [];
     let history = JSON.parse(localStorage.getItem('am2pm_history')) || [];
     let wins = JSON.parse(localStorage.getItem('am2pm_wins')) || [];
+    let matters = JSON.parse(localStorage.getItem('am2pm_matters')) || [];
     let workSchedule = JSON.parse(localStorage.getItem('am2pm_schedule')) || null;
 
     let openDrawers = {};
+    let openMatterDrawers = {};
     let homeCatFilter = 'all';
     let winCatFilter = 'all';
+    let matterFilter = 'active';
     let blackoutMode = false;
     let currentShiftTab = 'AM';
     let analyticsRange = 'week';
@@ -1309,6 +1482,7 @@
       localStorage.setItem('am2pm_tasks', JSON.stringify(tasks));
       localStorage.setItem('am2pm_history', JSON.stringify(history));
       localStorage.setItem('am2pm_wins', JSON.stringify(wins));
+      localStorage.setItem('am2pm_matters', JSON.stringify(matters));
       renderAll();
     }
 
@@ -1340,6 +1514,161 @@
       });
     }
 
+    /* Matters & Bring-Up Register Functions */
+    function openMatterSheet() {
+      document.getElementById('matterTitleInput').value = '';
+      document.getElementById('matterRefInput').value = '';
+      setChipGroupValue('matterCatChips', 'litigation');
+      document.getElementById('matterNextStepInput').value = '';
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 2);
+      const y = tomorrow.getFullYear();
+      const m = String(tomorrow.getMonth() + 1).padStart(2, '0');
+      const d = String(tomorrow.getDate()).padStart(2, '0');
+      document.getElementById('matterFollowUpInput').value = `${y}-${m}-${d}`;
+      document.getElementById('matterInitNoteInput').value = '';
+      document.getElementById('matterSheetBackdrop').classList.add('open');
+      setTimeout(() => document.getElementById('matterTitleInput').focus(), 100);
+    }
+
+    function closeMatterSheetOnBg(e) {
+      if (e.target.id === 'matterSheetBackdrop') {
+        document.getElementById('matterSheetBackdrop').classList.remove('open');
+      }
+    }
+
+    function saveNewMatter() {
+      const title = document.getElementById('matterTitleInput').value.trim();
+      if (!title) return;
+      const ref = document.getElementById('matterRefInput').value.trim();
+      const category = normalizeCategory(getChipVal('matterCatChips'));
+      const nextStep = document.getElementById('matterNextStepInput').value.trim() || 'Follow up on file progress';
+      const followUpDate = document.getElementById('matterFollowUpInput').value || todayISO();
+      const initNote = document.getElementById('matterInitNoteInput').value.trim();
+
+      const newId = Date.now();
+      const logs = [];
+      if (initNote) {
+        logs.push({ date: todayISO(), note: initNote });
+      } else {
+        logs.push({ date: todayISO(), note: `File opened — Next step: ${nextStep}` });
+      }
+
+      matters.unshift({
+        id: newId,
+        title,
+        ref,
+        category,
+        nextStep,
+        followUpDate,
+        status: 'active',
+        logs
+      });
+
+      openMatterDrawers[newId] = true;
+      document.getElementById('matterSheetBackdrop').classList.remove('open');
+      save();
+      switchView('matters');
+    }
+
+    function addMatterLog(matterId) {
+      const noteEl = document.getElementById(`m-note-${matterId}`);
+      const nextEl = document.getElementById(`m-next-${matterId}`);
+      const dateEl = document.getElementById(`m-date-${matterId}`);
+
+      const noteText = noteEl ? noteEl.value.trim() : '';
+      const nextText = nextEl ? nextEl.value.trim() : '';
+      const nextDate = dateEl ? dateEl.value : '';
+
+      if (!noteText && !nextText && !nextDate) return;
+
+      matters = matters.map(m => {
+        if (m.id !== matterId) return m;
+        const updatedLogs = [...(m.logs || [])];
+        if (noteText) {
+          updatedLogs.unshift({ date: todayISO(), note: noteText });
+        } else if (nextText) {
+          updatedLogs.unshift({ date: todayISO(), note: `Updated next step: ${nextText}` });
+        }
+        return {
+          ...m,
+          nextStep: nextText || m.nextStep,
+          followUpDate: nextDate || m.followUpDate,
+          logs: updatedLogs
+        };
+      });
+
+      openMatterDrawers[matterId] = true;
+      save();
+    }
+
+    function pushMatterToToday(matterId) {
+      const m = matters.find(item => item.id === matterId);
+      if (!m) return;
+      const prefix = m.ref ? `[${m.ref}] ` : '';
+      const taskTitle = `${prefix}${m.title} — ${m.nextStep}`;
+      const newTaskId = Date.now();
+
+      tasks.unshift({
+        id: newTaskId,
+        title: taskTitle,
+        category: normalizeCategory(m.category),
+        shift: 'AM',
+        priority: 1,
+        power: 'Needs Power/Data',
+        tracksHurdles: true,
+        stages: [],
+        done: false,
+        carriedOver: false
+      });
+
+      openDrawers[newTaskId] = true;
+      save();
+      switchView('today');
+    }
+
+    function toggleMatterClosed(matterId) {
+      matters = matters.map(m => {
+        if (m.id !== matterId) return m;
+        const nextStatus = m.status === 'closed' ? 'active' : 'closed';
+        const updatedLogs = [
+          { date: todayISO(), note: nextStatus === 'closed' ? 'File marked closed' : 'File reopened' },
+          ...(m.logs || [])
+        ];
+        return { ...m, status: nextStatus, logs: updatedLogs };
+      });
+      save();
+    }
+
+    function deleteMatter(matterId) {
+      matters = matters.filter(m => m.id !== matterId);
+      save();
+    }
+
+    function toggleMatterDrawer(matterId) {
+      openMatterDrawers[matterId] = !openMatterDrawers[matterId];
+      renderMatters();
+    }
+
+    function setMatterFilter(filter) {
+      matterFilter = filter;
+      ['due', 'active', 'closed', 'all'].forEach(k => {
+        document.getElementById(`matter-filter-${k}`).classList.toggle('active', matterFilter === k);
+      });
+      renderMatters();
+    }
+
+    function openDueMatters() {
+      matterFilter = 'due';
+      switchView('matters');
+    }
+
+    function getDueMattersCount() {
+      const today = todayISO();
+      return matters.filter(m => m.status !== 'closed' && m.followUpDate && m.followUpDate <= today).length;
+    }
+
+    /* Wins Folder Functions */
     function openWinSheet(prefillTask = null, existingWin = null) {
       editingWinId = existingWin ? existingWin.id : null;
       pendingWinSourceTaskId = prefillTask ? prefillTask.id : null;
@@ -1638,7 +1967,7 @@
       if (unfinished.length === 0 && completedCount === 0) return;
 
       const msg = unfinished.length > 0
-        ? `Roll ${unfinished.length} unfinished matter${unfinished.length === 1 ? '' : 's'} into a new day and clear ${completedCount} completed item${completedCount === 1 ? '' : 's'}?`
+        ? `Roll ${unfinished.length} unfinished item${unfinished.length === 1 ? '' : 's'} into a new day and clear ${completedCount} completed item${completedCount === 1 ? '' : 's'}?`
         : `Clear ${completedCount} completed item${completedCount === 1 ? '' : 's'} to start a clean slate?`;
 
       if (!confirm(msg)) return;
@@ -1786,6 +2115,16 @@
         total === 0 ? 'Tap + Add Task to plan your AM and PM shifts' : `${pct}% of today's active queue completed`;
       document.getElementById('heroBar').style.width = `${pct}%`;
 
+      const dueCount = getDueMattersCount();
+      const bannerEl = document.getElementById('homeBringUpBanner');
+      if (dueCount > 0) {
+        bannerEl.classList.add('show');
+        document.getElementById('bringupBannerTitle').textContent =
+          `${dueCount} File${dueCount === 1 ? '' : 's'} Due for Bring-Up Follow-Up`;
+      } else {
+        bannerEl.classList.remove('show');
+      }
+
       let filtered = tasks;
       if (homeCatFilter !== 'all') {
         filtered = filtered.filter(t => normalizeCategory(t.category) === homeCatFilter);
@@ -1828,6 +2167,106 @@
         return;
       }
       filtered.forEach(t => listEl.appendChild(buildTaskCard(t)));
+    }
+
+    function renderMatters() {
+      ['due', 'active', 'closed', 'all'].forEach(k => {
+        const btn = document.getElementById(`matter-filter-${k}`);
+        if (btn) btn.classList.toggle('active', matterFilter === k);
+      });
+
+      const today = todayISO();
+      let list = [...matters];
+
+      if (matterFilter === 'due') {
+        list = list.filter(m => m.status !== 'closed' && m.followUpDate && m.followUpDate <= today);
+      } else if (matterFilter === 'active') {
+        list = list.filter(m => m.status !== 'closed');
+      } else if (matterFilter === 'closed') {
+        list = list.filter(m => m.status === 'closed');
+      }
+
+      list.sort((a, b) => {
+        if ((a.status === 'closed') !== (b.status === 'closed')) {
+          return a.status === 'closed' ? 1 : -1;
+        }
+        return (a.followUpDate || '9999-12-31').localeCompare(b.followUpDate || '9999-12-31');
+      });
+
+      const container = document.getElementById('mattersList');
+      if (list.length === 0) {
+        container.innerHTML = `<div class="empty-box">No files in this view. Tap <strong>+ Log File</strong> above when you encounter a matter for the first time.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(m => {
+        const cat = CATEGORIES[normalizeCategory(m.category)];
+        const isClosed = m.status === 'closed';
+        const isOpen = !!openMatterDrawers[m.id];
+
+        let dueBadge = '';
+        if (!isClosed && m.followUpDate) {
+          if (m.followUpDate < today) {
+            dueBadge = `<span class="due-tag due-overdue">OVERDUE (${m.followUpDate})</span>`;
+          } else if (m.followUpDate === today) {
+            dueBadge = `<span class="due-tag due-today">BRING UP TODAY</span>`;
+          } else {
+            dueBadge = `<span class="due-tag due-upcoming">Bring Up: ${m.followUpDate}</span>`;
+          }
+        }
+
+        const logs = Array.isArray(m.logs) ? m.logs : [];
+
+        return `
+          <div class="task-card ${isClosed ? 'done' : ''}">
+            <div class="task-top-row">
+              <div class="cat-badge ${cat.bg}">${cat.code}</div>
+              <div class="task-body" onclick="toggleMatterDrawer(${m.id})">
+                <div class="task-title">${m.ref ? `${m.ref} — ` : ''}${m.title}</div>
+                <div class="task-meta">
+                  ${dueBadge}
+                  <span>${cat.name}</span>
+                  <span>/</span>
+                  <span>${logs.length} log${logs.length === 1 ? '' : 's'}</span>
+                </div>
+              </div>
+              <div class="task-actions">
+                ${!isClosed ? `<button class="win-pill-btn" onclick="pushMatterToToday(${m.id})">+ To Today</button>` : ''}
+                <button class="check-circle" onclick="toggleMatterClosed(${m.id})">${isClosed ? 'REOPEN' : 'CLOSE'}</button>
+                <button class="del-btn" onclick="deleteMatter(${m.id})">DEL</button>
+              </div>
+            </div>
+
+            <div class="stage-strip">
+              <div class="stage-header-row">
+                <div class="stage-current-label" onclick="toggleMatterDrawer(${m.id})">
+                  Next: ${m.nextStep} <span>(${isOpen ? 'Hide Log' : 'Chronology & Follow-Up'})</span>
+                </div>
+              </div>
+
+              <div class="stage-drawer ${isOpen ? 'open' : ''}">
+                ${logs.map(entry => `
+                  <div class="matter-log-item">
+                    <div class="matter-log-date">${entry.date}</div>
+                    <div>${entry.note}</div>
+                  </div>
+                `).join('')}
+
+                ${!isClosed ? `
+                  <div class="matter-update-box">
+                    <input id="m-note-${m.id}" type="text" placeholder="Log today's update (e.g., Served opposing counsel, awaiting ruling)..." />
+                    <input id="m-next-${m.id}" type="text" placeholder="Update next expected step (leave blank to keep current)..." />
+                    <div class="matter-update-row">
+                      <input id="m-date-${m.id}" type="date" value="${m.followUpDate || todayISO()}" />
+                      <button type="button" onclick="addMatterLog(${m.id})">Log Update</button>
+                    </div>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     function getStartOfWeek(date) {
@@ -1941,6 +2380,7 @@
       const sched = getActiveSchedule();
       document.getElementById('profScheduleSub').textContent = `${sched.start} – ${sched.end} (PM: ${sched.end}+ & career/personal)`;
       document.getElementById('profileRankBadge').textContent = currentBadge;
+      document.getElementById('profActiveMatters').textContent = matters.filter(m => m.status !== 'closed').length;
       document.getElementById('profTotal').textContent = totalAll;
       document.getElementById('profWins').textContent = wins.length;
       document.getElementById('profOffline').textContent =
@@ -1987,12 +2427,13 @@
 
     function copyReport() {
       const total = history.length;
+      const activeFiles = matters.filter(m => m.status !== 'closed').length;
       const lit = history.filter(h => normalizeCategory(h.category) === 'litigation').length;
       const conv = history.filter(h => normalizeCategory(h.category) === 'conveyancing').length;
       const prob = history.filter(h => normalizeCategory(h.category) === 'probate').length;
       const corp = history.filter(h => normalizeCategory(h.category) === 'corporate').length;
       const gen = history.filter(h => normalizeCategory(h.category) === 'general').length;
-      const text = `Am2Pm Progress Summary:\n- Total Stages & Tasks Cleared: ${total}\n- Saved Wins: ${wins.length}\n- Litigation: ${lit}\n- Conveyancing: ${conv}\n- Probate: ${prob}\n- Corporate Advisory & Compliance: ${corp}\n- General / Personal: ${gen}`;
+      const text = `Am2Pm Progress Summary:\n- Active Files in Register: ${activeFiles}\n- Total Stages & Tasks Cleared: ${total}\n- Saved Wins: ${wins.length}\n- Litigation: ${lit}\n- Conveyancing: ${conv}\n- Probate: ${prob}\n- Corporate Advisory & Compliance: ${corp}\n- General / Personal: ${gen}`;
       navigator.clipboard.writeText(text);
       alert('Progress summary copied to clipboard.');
     }
@@ -2008,6 +2449,7 @@
       setGreeting();
       renderHome();
       renderShifts();
+      renderMatters();
       renderAnalytics();
       renderWins();
     }
